@@ -1,0 +1,406 @@
+
+         ______________________________________________________________
+        |                                                              |
+        |                                                              |
+        |                   CENSO - Commandline ENSO                   |
+        |                           v 2.1.2                            |
+        |    energetic sorting of CREST Conformer Rotamer Ensembles    |
+        |                    University of Bonn, MCTC                  |
+        |                           Oct 2024                           |
+        |                 based on ENSO version 2.0.1                  |
+        |             L. M. Seidler, F. Bohle and S. Grimme            |
+        |                                                              |
+        |______________________________________________________________|
+
+        Please cite:
+        (TBA)
+        S. Grimme, F. Bohle, A. Hansen, P. Pracht, S. Spicher, and M. Stahn
+        J. Phys. Chem. A 2021, 125, 19, 4039-4054.
+        DOI: https://doi.org/10.1021/acs.jpca.1c00971
+
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Reading configuration file from /home/z5358697/.censo2rc.
+CALL: /srv/scratch/z5358697/.censo/bin/censo -i crest_conformers.xyz --maxcores 4 -O 1 --loglevel DEBUG
+Read 4 conformers.
+Number of atoms:              27
+Charge:                       0
+Unpaired electrons:           0
+
+
+----------------------------------------------------------------------------------------------------
+                                          GENERAL SETTINGS                                          
+----------------------------------------------------------------------------------------------------
+    
+imagthr:                      -100.0
+sthr:                         0.0
+scale:                        1.0
+temperature:                  298.15
+solvent:                      h2o
+sm_rrho:                      alpb
+multitemp:                    False
+evaluate_rrho:                False
+consider_sym:                 False
+bhess:                        False
+rmsdbias:                     False
+balance:                      False
+gas-phase:                    False
+copy_mo:                      True
+retry_failed:                 True
+trange:                       [273.15, 373.15, 5]
+
+
+
+----------------------------------------------------------------------------------------------------
+                                            PRESCREENING                                            
+----------------------------------------------------------------------------------------------------
+    
+threshold:                    4.0
+func:                         pbe-d4
+basis:                        def2-sv(p)
+prog:                         orca
+gfnv:                         gfn2
+run:                          True
+template:                     False
+
+
+Running xtb_gsolv calculation for CONF3.
+Running xtb_gsolv calculation for CONF2.
+Running xtb_gsolv calculation for CONF4.
+Running xtb_gsolv calculation for CONF1.
+Running sp calculation for CONF1.
+Running sp calculation for CONF2.
+Running sp calculation for CONF3.
+Running sp calculation for CONF4.
+
+
+
+-------------------------------- PRESCREENING SINGLE-POINT RESULTS ---------------------------------
+
+CONF#        E (xTB)          ΔE (xTB)          E (DFT)           ΔE (DFT)        ΔGsolv (xTB)           Gtot             ΔGtot          Boltzmann weight   
+               [Eh]          [kcal/mol]           [Eh]           [kcal/mol]        [kcal/mol]            [Eh]           [kcal/mol]        % at 298.15 K     
+CONF1       -44.493184          0.00          -1069.340328          0.00           -10.428940        -1069.356947          0.00               48.87         
+CONF2       -44.492848          0.21          -1069.340092          0.15           -10.385940        -1069.356643          0.19               35.40         
+CONF3       -44.492651          0.33          -1069.338720          1.01           -10.467926        -1069.355402          0.97                9.50         
+CONF4       -44.492108          0.68          -1069.338026          1.44           -10.652527        -1069.355001          1.22                6.22         
+
+Boltzmann averaged free energy/enthalpy of ensemble on input geometries (not DFT optimized):
+temperature /K:   avE(T) /a.u.   avG(T) /a.u.
+    298.15       -1069.3399483   -1069.3565717     <<==part0==
+----------------------------------------------------------------------------------------------------
+
+Number of conformers:         4
+Highest ranked conformer:     CONF1
+
+
+Ran prescreening in 19.48 seconds!
+
+----------------------------------------------------------------------------------------------------
+                                             SCREENING                                              
+----------------------------------------------------------------------------------------------------
+    
+threshold:                    3.5
+func:                         r2scan-3c
+basis:                        def2-tzvp
+prog:                         orca
+sm:                           smd
+gfnv:                         gfn2
+run:                          True
+implicit:                     False
+template:                     False
+
+
+Running gsolv calculation for CONF4.
+Running gsolv calculation for CONF1.
+Running gsolv calculation for CONF2.
+Running gsolv calculation for CONF3.
+
+----------------------------- SCREENING SINGLE-POINT (+ mRRHO) RESULTS -----------------------------
+
+CONF#        G (xTB)          ΔG (xTB)          E (DFT)           ΔGsolv         GmRRHO           Gtot             ΔGtot          Boltzmann weight   
+               [Eh]          [kcal/mol]           [Eh]             [Eh]           [Eh]            [Eh]           [kcal/mol]        % at 298.15 K     
+CONF1       -44.509804          ---           -1070.814782       -0.015451        ---         -1070.830233          0.41               32.14         
+CONF2       -44.509399          ---           -1070.814902       -0.015986        ---         -1070.830888          0.00               64.30         
+CONF3       -44.509333          ---           -1070.813082       -0.014672        ---         -1070.827755          1.97                2.33         
+CONF4       -44.509084          ---           -1070.812208       -0.014944        ---         -1070.827152          2.34                1.23         
+
+Boltzmann averaged free energy/enthalpy of ensemble on input geometries (not DFT optimized):
+temperature /K:   avE(T) /a.u.   avG(T) /a.u.
+    298.15       -1070.8147879   -1070.8305584     <<==part1==
+----------------------------------------------------------------------------------------------------
+
+
+----------------------------------- SCREENING RANKING COMPARISON -----------------------------------
+
+CONF#       ΔGtot prescreening       ΔGtot screening   
+                [kcal/mol]             [kcal/mol]      
+CONF1              0.00                   0.41         
+CONF2              0.19                   0.00         
+CONF3              0.97                   1.97         
+CONF4              1.22                   2.34         
+----------------------------------------------------------------------------------------------------
+
+
+
+Number of conformers:         4
+Highest ranked conformer:     CONF2
+
+
+Ran screening in 155.51 seconds!
+
+----------------------------------------------------------------------------------------------------
+                                            OPTIMIZATION                                            
+----------------------------------------------------------------------------------------------------
+    
+optcycles:                    8
+maxcyc:                       200
+threshold:                    1.5
+hlow:                         0.01
+gradthr:                      0.01
+func:                         r2scan-3c
+basis:                        def2-tzvp
+prog:                         orca
+sm:                           smd
+gfnv:                         gfn2
+optlevel:                     normal
+run:                          True
+macrocycles:                  True
+crestcheck:                   True
+template:                     False
+constrain:                    False
+xtb_opt:                      True
+
+
+Optimization using macrocycles, 8 microcycles per step.
+Running xtb_opt calculation for CONF2.
+Running xtb_opt calculation for CONF3.
+Running xtb_opt calculation for CONF1.
+Running xtb_opt calculation for CONF4.
+Running xtb_rrho calculation for CONF2.
+Running xtb_rrho calculation for CONF1.
+Running xtb_rrho calculation for CONF3.
+Running xtb_rrho calculation for CONF4.
+
+----------------------------------- OPTIMIZATION CYCLE 8 UPDATE ------------------------------------
+
+CONF#           Gtot             ΔGtot          grad_norm       converged   
+                [Eh]           [kcal/mol]        [Eh/a0]                    
+CONF1       -1070.665240          0.37          0.001014          False     
+CONF2       -1070.665831          0.00          0.001001          False     
+CONF3       -1070.661931          2.45          0.004979          False     
+CONF4       -1070.661666          2.61          0.003118          False     
+----------------------------------------------------------------------------------------------------
+Running xtb_opt calculation for CONF2.
+Running xtb_opt calculation for CONF1.
+Running xtb_opt calculation for CONF3.
+Running xtb_opt calculation for CONF4.
+CONF2 converged after 17 steps.
+CONF1 converged after 17 steps.
+
+----------------------------------- OPTIMIZATION CYCLE 16 UPDATE -----------------------------------
+
+CONF#           Gtot             ΔGtot          grad_norm       converged   
+                [Eh]           [kcal/mol]        [Eh/a0]                    
+CONF1       -1070.665243          0.37          0.000485          True      
+CONF2       -1070.665835          0.00          0.000409          True      
+CONF3       -1070.663187          1.66          0.005392          False     
+CONF4       -1070.661830          2.51          0.003033          False     
+----------------------------------------------------------------------------------------------------
+Running xtb_opt calculation for CONF3.
+Running xtb_opt calculation for CONF4.
+
+----------------------------------- OPTIMIZATION CYCLE 24 UPDATE -----------------------------------
+
+CONF#           Gtot             ΔGtot          grad_norm       converged   
+                [Eh]           [kcal/mol]        [Eh/a0]                    
+CONF1       -1070.665243          0.37          0.000485          True      
+CONF2       -1070.665835          0.00          0.000409          True      
+CONF3       -1070.663728          1.32          0.002555          False     
+CONF4       -1070.663043          1.75          0.006337          False     
+----------------------------------------------------------------------------------------------------
+Running xtb_opt calculation for CONF4.
+Running xtb_opt calculation for CONF3.
+
+----------------------------------- OPTIMIZATION CYCLE 32 UPDATE -----------------------------------
+
+CONF#           Gtot             ΔGtot          grad_norm       converged   
+                [Eh]           [kcal/mol]        [Eh/a0]                    
+CONF1       -1070.665243          0.37          0.000485          True      
+CONF2       -1070.665835          0.00          0.000409          True      
+CONF3       -1070.663965          1.17          0.006620          False     
+CONF4       -1070.663989          1.16          0.003720          False     
+----------------------------------------------------------------------------------------------------
+Running xtb_opt calculation for CONF3.
+Running xtb_opt calculation for CONF4.
+
+----------------------------------- OPTIMIZATION CYCLE 40 UPDATE -----------------------------------
+
+CONF#           Gtot             ΔGtot          grad_norm       converged   
+                [Eh]           [kcal/mol]        [Eh/a0]                    
+CONF1       -1070.665243          0.37          0.000485          True      
+CONF2       -1070.665835          0.00          0.000409          True      
+CONF3       -1070.664070          1.11          0.000826          False     
+CONF4       -1070.664443          0.87          0.004612          False     
+----------------------------------------------------------------------------------------------------
+Running xtb_opt calculation for CONF4.
+Running xtb_opt calculation for CONF3.
+CONF3 converged after 81 steps.
+
+----------------------------------- OPTIMIZATION CYCLE 48 UPDATE -----------------------------------
+
+CONF#           Gtot             ΔGtot          grad_norm       converged   
+                [Eh]           [kcal/mol]        [Eh/a0]                    
+CONF1       -1070.665243          0.37          0.000485          True      
+CONF2       -1070.665835          0.00          0.000409          True      
+CONF3       -1070.664071          1.11          0.000502          True      
+CONF4       -1070.664687          0.72          0.003675          False     
+----------------------------------------------------------------------------------------------------
+Running xtb_opt calculation for CONF4.
+
+----------------------------------- OPTIMIZATION CYCLE 56 UPDATE -----------------------------------
+
+CONF#           Gtot             ΔGtot          grad_norm       converged   
+                [Eh]           [kcal/mol]        [Eh/a0]                    
+CONF1       -1070.665243          0.37          0.000485          True      
+CONF2       -1070.665835          0.00          0.000409          True      
+CONF3       -1070.664071          1.11          0.000502          True      
+CONF4       -1070.664934          0.57          0.002692          False     
+----------------------------------------------------------------------------------------------------
+Running xtb_opt calculation for CONF4.
+
+----------------------------------- OPTIMIZATION CYCLE 64 UPDATE -----------------------------------
+
+CONF#           Gtot             ΔGtot          grad_norm       converged   
+                [Eh]           [kcal/mol]        [Eh/a0]                    
+CONF1       -1070.665243          0.37          0.000485          True      
+CONF2       -1070.665835          0.00          0.000409          True      
+CONF3       -1070.664071          1.11          0.000502          True      
+CONF4       -1070.665024          0.51          0.001890          False     
+----------------------------------------------------------------------------------------------------
+Running xtb_opt calculation for CONF4.
+CONF4 converged after 130 steps.
+
+----------------------------------- OPTIMIZATION CYCLE 72 UPDATE -----------------------------------
+
+CONF#           Gtot             ΔGtot          grad_norm       converged   
+                [Eh]           [kcal/mol]        [Eh/a0]                    
+CONF1       -1070.665243          0.37          0.000485          True      
+CONF2       -1070.665835          0.00          0.000409          True      
+CONF3       -1070.664071          1.11          0.000502          True      
+CONF4       -1070.665034          0.50          0.000970          True      
+----------------------------------------------------------------------------------------------------
+Running xtb_rrho calculation for CONF2.
+Running xtb_rrho calculation for CONF4.
+Running xtb_rrho calculation for CONF3.
+Running xtb_rrho calculation for CONF1.
+
+--------------------------------------- OPTIMIZATION RESULTS ---------------------------------------
+
+CONF#       E (DFT) (+ ΔGsolv)       ΔE (DFT) (+ δΔGsolv)       GmRRHO           Gtot             ΔGtot          Boltzmann weight   
+                   [Eh]                   [kcal/mol]             [Eh]            [Eh]           [kcal/mol]        % at 298.15 K     
+CONF1          -1070.833313                  0.38                ---         -1070.665266          0.36               18.28         
+CONF2          -1070.833909                  0.01                ---         -1070.665833          0.00               33.33         
+CONF3          -1070.833290                  0.40                ---         -1070.665162          0.42               16.37         
+CONF4          -1070.833921                  0.00                ---         -1070.665796          0.02               32.03         
+
+Boltzmann averaged free energy/enthalpy of ensemble on optimized geometries:
+temperature /K:   avE(T) /a.u.   avG(T) /a.u.
+    298.15       -1070.8337027   -1070.6656077     <<==part2==
+----------------------------------------------------------------------------------------------------
+
+
+--------------------------------------- OPTIMIZATION RESULTS ---------------------------------------
+
+CONF#       E (DFT) (+ ΔGsolv)       ΔE (DFT) (+ δΔGsolv)       GmRRHO           Gtot             ΔGtot          Boltzmann weight   
+                   [Eh]                   [kcal/mol]             [Eh]            [Eh]           [kcal/mol]        % at 298.15 K     
+CONF1          -1070.833313                  0.38                ---         -1070.665266          0.36               18.28         
+CONF2          -1070.833909                  0.01                ---         -1070.665833          0.00               33.33         
+CONF3          -1070.833290                  0.40                ---         -1070.665162          0.42               16.37         
+CONF4          -1070.833921                  0.00                ---         -1070.665796          0.02               32.03         
+
+Boltzmann averaged free energy/enthalpy of ensemble on optimized geometries:
+temperature /K:   avE(T) /a.u.   avG(T) /a.u.
+    298.15       -1070.8337027   -1070.6656077     <<==part2==
+----------------------------------------------------------------------------------------------------
+
+
+--------------------------------- OPTIMIZATION RANKING COMPARISON ----------------------------------
+
+CONF#       ΔGtot prescreening       ΔGtot screening       ΔGtot optimization   
+                [kcal/mol]             [kcal/mol]              [kcal/mol]       
+CONF1              0.00                   0.41                    0.36          
+CONF2              0.19                   0.00                    0.00          
+CONF3              0.97                   1.97                    0.42          
+CONF4              1.22                   2.34                    0.02          
+----------------------------------------------------------------------------------------------------
+
+
+
+Number of conformers:         4
+Highest ranked conformer:     CONF2
+
+
+Ran optimization in 5914.26 seconds!
+
+----------------------------------------------------------------------------------------------------
+                                             REFINEMENT                                             
+----------------------------------------------------------------------------------------------------
+    
+threshold:                    0.95
+func:                         wb97x-v
+basis:                        def2-tzvp
+prog:                         orca
+sm:                           smd
+gfnv:                         gfn2
+run:                          True
+implicit:                     False
+template:                     False
+
+
+Running gsolv calculation for CONF2.
+Running gsolv calculation for CONF1.
+Running gsolv calculation for CONF4.
+Running gsolv calculation for CONF3.
+No longer considering CONF2.
+No longer considering CONF4.
+No longer considering CONF1.
+No longer considering CONF3.
+
+---------------------------- REFINEMENT SINGLE-POINT (+ mRRHO) RESULTS -----------------------------
+
+CONF#         E (DFT)           ΔGsolv         GmRRHO           Gtot             ΔGtot          Boltzmann weight   
+                [Eh]             [Eh]           [Eh]            [Eh]           [kcal/mol]        % at 298.15 K     
+CONF1       -1070.963915       -0.017148        ---         -1070.981063          0.17               21.51         
+CONF2       -1070.963679       -0.017652        ---         -1070.981332          0.00               28.58         
+CONF3       -1070.963940       -0.017109        ---         -1070.981049          0.18               21.18         
+CONF4       -1070.963662       -0.017674        ---         -1070.981336          0.00               28.73         
+
+Boltzmann averaged free energy/enthalpy of ensemble (high level single-points):
+temperature /K:   avE(T) /a.u.   avG(T) /a.u.
+    298.15       -1070.9637803   -1070.9812153     <<==part3==
+----------------------------------------------------------------------------------------------------
+
+
+---------------------------------- REFINEMENT RANKING COMPARISON -----------------------------------
+
+CONF#       ΔGtot prescreening       ΔGtot screening       ΔGtot optimization       ΔGtot refinement   
+                [kcal/mol]             [kcal/mol]              [kcal/mol]              [kcal/mol]      
+CONF1              0.00                   0.41                    0.36                    0.17         
+CONF2              0.19                   0.00                    0.00                    0.00         
+CONF3              0.97                   1.97                    0.42                    0.18         
+CONF4              1.22                   2.34                    0.02                    0.00         
+----------------------------------------------------------------------------------------------------
+
+
+
+Number of conformers:         4
+Highest ranked conformer:     CONF4
+
+
+Ran refinement in 1081.18 seconds!
+
+Ran CENSO in 01:59:30
+
+CENSO all done!
