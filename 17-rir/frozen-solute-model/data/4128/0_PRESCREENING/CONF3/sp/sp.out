@@ -1,0 +1,2834 @@
+
+                                 *****************
+                                 * O   R   C   A *
+                                 *****************
+
+                                            #,                                       
+                                            ###                                      
+                                            ####                                     
+                                            #####                                    
+                                            ######                                   
+                                           ########,                                 
+                                     ,,################,,,,,                         
+                               ,,#################################,,                 
+                          ,,##########################################,,             
+                       ,#########################################, ''#####,          
+                    ,#############################################,,   '####,        
+                  ,##################################################,,,,####,       
+                ,###########''''           ''''###############################       
+              ,#####''   ,,,,##########,,,,          '''####'''          '####       
+            ,##' ,,,,###########################,,,                        '##       
+           ' ,,###''''                  '''############,,,                           
+         ,,##''                                '''############,,,,        ,,,,,,###''
+      ,#''                                            '''#######################'''  
+     '                                                          ''''####''''         
+             ,#######,   #######,   ,#######,      ##                                
+            ,#'     '#,  ##    ##  ,#'     '#,    #''#        ,####,   ,####,        
+            ##       ##  ##   ,#'  ##            #'  '#       #'       #'  '#        
+            ##       ##  #######   ##           ,######,      #####,   #    #        
+            '#,     ,#'  ##    ##  '#,     ,#' ,#      #,     #,   #   #,  ,#        
+             '#######'   ##     ##  '#######'  #'      '#     '####' # '####'        
+
+
+
+                #########################################################
+                #                        -***-                          #
+                #          Department of theory and spectroscopy        #
+                #                                                       #
+                #                      Frank Neese                      #
+                #                                                       #
+                #     Directorship, Architecture, Infrastructure        #
+                #                    SHARK, DRIVERS                     #
+                #        Core code/Algorithms in most modules           #
+                #                                                       #
+                #        Max Planck Institute fuer Kohlenforschung      #
+                #                Kaiser Wilhelm Platz 1                 #
+                #                 D-45470 Muelheim/Ruhr                 #
+                #                      Germany                          #
+                #                                                       #
+                #                  All rights reserved                  #
+                #                        -***-                          #
+                #########################################################
+
+
+                         Program Version 6.0.0  -   RELEASE  -
+
+
+ With contributions from (in alphabetic order):
+   Daniel Aravena         : Magnetic Suceptibility
+   Michael Atanasov       : Ab Initio Ligand Field Theory (pilot matlab implementation)
+   Alexander A. Auer      : GIAO ZORA, VPT2 properties, NMR spectrum
+   Ute Becker             : All parallelization in ORCA, NUMFREQ, NUMCALC
+   Giovanni Bistoni       : ED, misc. LED, open-shell LED, HFLD
+   Martin Brehm           : Molecular dynamics
+   Dmytro Bykov           : pre 5.0 version of the SCF Hessian
+   Marcos Casanova-Páez   : Triplet and SCS-CIS(D). UHF-(DLPNO)-IP/EA/STEOM-CCSD. UHF-CVS-IP/STEOM-CCSD
+   Vijay G. Chilkuri      : MRCI spin determinant printing, contributions to CSF-ICE
+   Pauline Colinet        : FMM embedding
+   Dipayan Datta          : RHF DLPNO-CCSD density
+   Achintya Kumar Dutta   : EOM-CC, STEOM-CC
+   Nicolas Foglia         : Exact transition moments, OPA infrastructure, MCD improvements
+   Dmitry Ganyushin       : Spin-Orbit,Spin-Spin,Magnetic field MRCI
+   Miquel Garcia          : C-PCM and meta-GGA Hessian, CCSD/C-PCM, Gaussian charge scheme
+   Tiago L. C. Gouveia    : GS-ROHF, GS-ROCIS
+   Yang Guo               : DLPNO-NEVPT2, F12-NEVPT2, CIM, IAO-localization
+   Andreas Hansen         : Spin unrestricted coupled pair/coupled cluster methods
+   Ingolf Harden          : AUTO-CI MPn and infrastructure 
+   Benjamin Helmich-Paris : MC-RPA, TRAH-(SCF,CASSCF), AVAS, COSX integrals, SCF dyn. polar.
+   Lee Huntington         : MR-EOM, pCC
+   Robert Izsak           : Overlap fitted RIJCOSX, COSX-SCS-MP3, EOM
+   Riya Kayal             : Wick's Theorem for AUTO-CI, AUTO-CI UHF-CCSDT
+   Emily Kempfer          : AUTO-CI, RHF CISDT and CCSDT
+   Christian Kollmar      : KDIIS, OOCD, Brueckner-CCSD(T), CCSD density, CASPT2, CASPT2-K, improved NEVPT2
+   Axel Koslowski         : Symmetry handling
+   Simone Kossmann        : Meta GGA functionals, TD-DFT gradient, OOMP2, (MP2 Hessian; deprecated post 5.0)
+   Lucas Lang             : DCDCAS
+   Marvin Lechner         : AUTO-CI (C++ implementation), FIC-MRCC
+   Spencer Leger          : CASSCF response
+   Dagmar Lenk            : GEPOL surface, SMD, ORCA-2-JSON
+   Dimitrios Liakos       : Extrapolation schemes; Compound Job, initial MDCI parallelization
+   Dimitrios Manganas     : Further ROCIS development; embedding schemes. LFT, Crystal Embedding
+   Dimitrios Pantazis     : SARC Basis sets
+   Anastasios Papadopoulos: AUTO-CI, single reference methods and gradients
+   Taras Petrenko         : pre 6.0 DFT Hessian and TD-DFT gradient, (ASA, deprecated), ECA, 1-Electron XAS/XES, NRVS
+   Peter Pinski           : DLPNO-MP2, DLPNO-MP2 Gradient
+   Christoph Reimann      : Effective Core Potentials
+   Marius Retegan         : Local ZFS, SOC
+   Christoph Riplinger    : Optimizer, TS searches, QM/MM, DLPNO-CCSD(T), (RO)-DLPNO pert. Triples
+   Michael Roemelt        : Original ROCIS implementation
+   Masaaki Saitow         : Open-shell DLPNO-CCSD energy and density
+   Barbara Sandhoefer     : DKH picture change effects
+   Kantharuban Sivalingam : CASSCF convergence/infrastructure, NEVPT2 and variants, FIC-MRCI
+   Bernardo de Souza      : ESD, SOC TD-DFT
+   Georgi Stoychev        : AutoAux, RI-MP2 NMR, DLPNO-MP2 response, X2C
+   Van Anh Tran           : RI-MP2 g-tensors
+   Willem Van den Heuvel  : Paramagnetic NMR
+   Zikuan Wang            : NOTCH, Electric field optimization 
+   Frank Wennmohs         : Technical directorship and infrastructure
+   Hang Xu                : AUTO-CI-Response properties 
+
+
+ We gratefully acknowledge several colleagues who have allowed us to
+ interface, adapt or use parts of their codes:
+   Stefan Grimme, W. Hujo, H. Kruse, P. Pracht,  : VdW corrections, initial TS optimization,
+                  C. Bannwarth, S. Ehlert,         DFT functionals, gCP, sTDA/sTD-DF
+                  L. Wittmann, M. Mueller
+   Ed Valeev, F. Pavosevic, A. Kumar             : LibInt (2-el integral package), F12 methods
+   Garnet Chan, S. Sharma, J. Yang, R. Olivares  : DMRG
+   Ulf Ekstrom                                   : XCFun DFT Library
+   Mihaly Kallay                                 : mrcc  (arbitrary order and MRCC methods)
+   Frank Weinhold                                : gennbo (NPA and NBO analysis)
+   Simon Mueller                                 : openCOSMO-RS
+   Christopher J. Cramer and Donald G. Truhlar   : smd solvation model
+   Lars Goerigk                                  : TD-DFT with DH, B97 family of functionals
+   V. Asgeirsson, H. Jonsson                     : NEB implementation
+   FAccTs GmbH                                   : IRC, NEB, NEB-TS, DLPNO-Multilevel, CI-OPT
+                                                   MM, QMMM, 2- and 3-layer-ONIOM, Crystal-QMMM,
+                                                   LR-CPCM, SF, NACMEs, symmetry and pop. for TD-DFT,
+                                                   nearIR, NL-DFT gradient (VV10), updates on ESD,
+                                                   ML-optimized integration grids, MBIS, APM,
+                                                   GOAT, DOCKER, SOLVATOR, interface openCOSMO-RS
+   S Lehtola, MJT Oliveira, MAL Marques          : LibXC Library
+   Liviu Ungur et al                             : ANISO software
+
+
+ Your calculation uses the libint2 library for the computation of 2-el integrals
+ For citations please refer to: http://libint.valeyev.net
+
+ Your ORCA version has been built with support for libXC version: 6.2.2
+ For citations please refer to: https://libxc.gitlab.io
+
+ This ORCA versions uses:
+   CBLAS   interface :  Fast vector & matrix operations
+   LAPACKE interface :  Fast linear algebra routines
+   SCALAPACK package :  Parallel linear algebra routines
+   Shared memory     :  Shared parallel matrices
+   BLAS/LAPACK       :  OpenBLAS 0.3.27  USE64BITINT DYNAMIC_ARCH NO_AFFINITY SkylakeX SINGLE_THREADED
+        Core in use  :  SkylakeX
+   Copyright (c) 2011-2014, The OpenBLAS Project
+
+
+Your calculation utilizes the geometrical counterpoise correction gCP
+Please cite in your paper:
+H.Kruse, S. Grimme J.Chem.Phys., 136, (2012), 154101 
+   
+
+Your calculation utilizes the atom-pairwise dispersion correction
+based on EEQ partial charges (D4)
+
+
+================================================================================
+
+----- Orbital basis set information -----
+Your calculation utilizes the basis: def2-SV(P)
+   F. Weigend and R. Ahlrichs, Phys. Chem. Chem. Phys. 7, 3297 (2005).
+
+----- AuxJ basis set information -----
+Your calculation utilizes the auxiliary basis: def2/J
+   F. Weigend, Phys. Chem. Chem. Phys. 8, 1057 (2006).
+
+================================================================================
+                                        WARNINGS
+                       Please study these warnings very carefully!
+================================================================================
+
+
+================================================================================
+                                       INPUT FILE
+================================================================================
+NAME = sp.inp
+|  1> ! pbe def2-sv(p) def2/J RI DEFGRID1 loosescf d4 GCP(DFT/SV(P)) printgap
+|  2> %output
+|  3>     printlevel normal
+|  4> end
+|  5> * xyz 0 1
+|  6> C 2.8863140963 -0.0734376843 0.0135755509
+|  7> C 1.3928319149 0.0045286469 -0.0055851871
+|  8> C 0.71396894 1.2173923292 -0.0064328858
+|  9> C -0.6698105271 1.2255397516 -0.0051988514
+| 10> C -1.356546812 0.0151544037 -0.0017970167
+| 11> N -0.7108383274 -1.1488907733 -0.005469461
+| 12> C 0.6097256861 -1.1458564878 -0.0078371302
+| 13> C -2.8517693669 -0.0437298785 0.0110787734
+| 14> H 3.2306775358 -0.3422723664 1.0116868459
+| 15> H 3.2380376788 -0.835861221 -0.6777152043
+| 16> H 3.3254391597 0.8834416965 -0.2559983371
+| 17> H 1.2648575443 2.1474981059 -0.0094998554
+| 18> H -1.2135549982 2.1578565326 -0.0074032922
+| 19> H 1.0717873092 -2.1255456476 -0.0127708854
+| 20> H -3.1924841268 -0.4952919497 0.9405536302
+| 21> H -3.278630449 0.9503140538 -0.0813754684
+| 22> H -3.2039824458 -0.6694576633 -0.8052904817
+| 23> *
+| 24> 
+| 25>                          ****END OF INPUT****
+================================================================================
+
+                       ****************************
+                       * Single Point Calculation *
+                       ****************************
+
+---------------------------------
+CARTESIAN COORDINATES (ANGSTROEM)
+---------------------------------
+  C      2.886314   -0.073438    0.013576
+  C      1.392832    0.004529   -0.005585
+  C      0.713969    1.217392   -0.006433
+  C     -0.669811    1.225540   -0.005199
+  C     -1.356547    0.015154   -0.001797
+  N     -0.710838   -1.148891   -0.005469
+  C      0.609726   -1.145856   -0.007837
+  C     -2.851769   -0.043730    0.011079
+  H      3.230678   -0.342272    1.011687
+  H      3.238038   -0.835861   -0.677715
+  H      3.325439    0.883442   -0.255998
+  H      1.264858    2.147498   -0.009500
+  H     -1.213555    2.157857   -0.007403
+  H      1.071787   -2.125546   -0.012771
+  H     -3.192484   -0.495292    0.940554
+  H     -3.278630    0.950314   -0.081375
+  H     -3.203982   -0.669458   -0.805290
+
+----------------------------
+CARTESIAN COORDINATES (A.U.)
+----------------------------
+  NO LB      ZA    FRAG     MASS         X           Y           Z
+   0 C     6.0000    0    12.011    5.454343   -0.138777    0.025654
+   1 C     6.0000    0    12.011    2.632071    0.008558   -0.010554
+   2 C     6.0000    0    12.011    1.349206    2.300538   -0.012156
+   3 C     6.0000    0    12.011   -1.265758    2.315934   -0.009824
+   4 C     6.0000    0    12.011   -2.563502    0.028638   -0.003396
+   5 N     7.0000    0    14.007   -1.343290   -2.171089   -0.010336
+   6 C     6.0000    0    12.011    1.152215   -2.165355   -0.014810
+   7 C     6.0000    0    12.011   -5.389063   -0.082637    0.020936
+   8 H     1.0000    0     1.008    6.105096   -0.646801    1.911811
+   9 H     1.0000    0     1.008    6.119004   -1.579549   -1.280696
+  10 H     1.0000    0     1.008    6.284169    1.669463   -0.483767
+  11 H     1.0000    0     1.008    2.390234    4.058183   -0.017952
+  12 H     1.0000    0     1.008   -2.293287    4.077758   -0.013990
+  13 H     1.0000    0     1.008    2.025384   -4.016699   -0.024133
+  14 H     1.0000    0     1.008   -6.032921   -0.935966    1.777389
+  15 H     1.0000    0     1.008   -6.195714    1.795833   -0.153777
+  16 H     1.0000    0     1.008   -6.054649   -1.265092   -1.521778
+
+--------------------------------
+INTERNAL COORDINATES (ANGSTROEM)
+--------------------------------
+ C      0   0   0     0.000000000000     0.00000000     0.00000000
+ C      1   0   0     1.495638629095     0.00000000     0.00000000
+ C      2   1   0     1.389925886199   122.22251025     0.00000000
+ C      3   2   1     1.383804002343   119.57386059   180.92423775
+ C      4   3   2     1.391636083137   119.23196656     0.06273168
+ N      5   4   3     1.331147665749   121.41242790   359.70942006
+ C      6   5   4     1.320569621980   118.88611041     0.23053298
+ C      5   4   3     1.496436979409   121.82450524   179.48687244
+ H      1   2   3     1.089534038922   109.88953175   103.73179902
+ H      1   2   3     1.087603804713   110.56851146   222.71597269
+ H      1   2   3     1.086793012398   110.75654455   343.90604549
+ H      3   2   1     1.081010830890   120.12573759     1.01332412
+ H      4   3   2     1.079294903882   120.58866848   180.09697360
+ H      7   6   5     1.083197182101   115.11903443   180.11621162
+ H      8   5   4     1.088080126270   109.66744542   244.84530640
+ H      8   5   4     1.085763100119   110.85882224     5.55823694
+ H      8   5   4     1.087220343027   109.86960138   126.86303645
+
+---------------------------
+INTERNAL COORDINATES (A.U.)
+---------------------------
+ C      0   0   0     0.000000000000     0.00000000     0.00000000
+ C      1   0   0     2.826347404303     0.00000000     0.00000000
+ C      2   1   0     2.626579271364   122.22251025     0.00000000
+ C      3   2   1     2.615010587452   119.57386059   180.92423775
+ C      4   3   2     2.629811075212   119.23196656     0.06273168
+ N      5   4   3     2.515504532074   121.41242790   359.70942006
+ C      6   5   4     2.495514926319   118.88611041     0.23053298
+ C      5   4   3     2.827856067755   121.82450524   179.48687244
+ H      1   2   3     2.058920947149   109.88953175   103.73179902
+ H      1   2   3     2.055273333118   110.56851146   222.71597269
+ H      1   2   3     2.053741157692   110.75654455   343.90604549
+ H      3   2   1     2.042814418184   120.12573759     1.01332412
+ H      4   3   2     2.039571786073   120.58866848   180.09697360
+ H      7   6   5     2.046946023206   115.11903443   180.11621162
+ H      8   5   4     2.056173450413   109.66744542   244.84530640
+ H      8   5   4     2.051794905543   110.85882224     5.55823694
+ H      8   5   4     2.054548695549   109.86960138   126.86303645
+
+---------------------
+BASIS SET INFORMATION
+---------------------
+There are 3 groups of distinct atoms
+
+ Group   1 Type C   : 7s4p1d contracted to 3s2p1d pattern {511/31/1}
+ Group   2 Type N   : 7s4p1d contracted to 3s2p1d pattern {511/31/1}
+ Group   3 Type H   : 4s contracted to 2s pattern {31}
+
+Atom   0C    basis set group =>   1
+Atom   1C    basis set group =>   1
+Atom   2C    basis set group =>   1
+Atom   3C    basis set group =>   1
+Atom   4C    basis set group =>   1
+Atom   5N    basis set group =>   2
+Atom   6C    basis set group =>   1
+Atom   7C    basis set group =>   1
+Atom   8H    basis set group =>   3
+Atom   9H    basis set group =>   3
+Atom  10H    basis set group =>   3
+Atom  11H    basis set group =>   3
+Atom  12H    basis set group =>   3
+Atom  13H    basis set group =>   3
+Atom  14H    basis set group =>   3
+Atom  15H    basis set group =>   3
+Atom  16H    basis set group =>   3
+---------------------------------
+AUXILIARY/J BASIS SET INFORMATION
+---------------------------------
+There are 3 groups of distinct atoms
+
+ Group   1 Type C   : 12s5p4d2f1g contracted to 6s4p3d1f1g pattern {711111/2111/211/2/1}
+ Group   2 Type N   : 12s5p4d2f1g contracted to 6s4p3d1f1g pattern {711111/2111/211/2/1}
+ Group   3 Type H   : 5s2p1d contracted to 3s1p1d pattern {311/2/1}
+
+Atom   0C    basis set group =>   1
+Atom   1C    basis set group =>   1
+Atom   2C    basis set group =>   1
+Atom   3C    basis set group =>   1
+Atom   4C    basis set group =>   1
+Atom   5N    basis set group =>   2
+Atom   6C    basis set group =>   1
+Atom   7C    basis set group =>   1
+Atom   8H    basis set group =>   3
+Atom   9H    basis set group =>   3
+Atom  10H    basis set group =>   3
+Atom  11H    basis set group =>   3
+Atom  12H    basis set group =>   3
+Atom  13H    basis set group =>   3
+Atom  14H    basis set group =>   3
+Atom  15H    basis set group =>   3
+Atom  16H    basis set group =>   3
+------------------------------------------------------------------------------
+                             ORCA STARTUP CALCULATIONS
+                           -- RI-GTO INTEGRALS CHOSEN --
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                   ___                                                        
+                  /   \      - P O W E R E D   B Y -                         
+                 /     \                                                     
+                 |  |  |   _    _      __       _____    __    __             
+                 |  |  |  | |  | |    /  \     |  _  \  |  |  /  |          
+                  \  \/   | |  | |   /    \    | | | |  |  | /  /          
+                 / \  \   | |__| |  /  /\  \   | |_| |  |  |/  /          
+                |  |  |   |  __  | /  /__\  \  |    /   |      \           
+                |  |  |   | |  | | |   __   |  |    \   |  |\   \          
+                \     /   | |  | | |  |  |  |  | |\  \  |  | \   \       
+                 \___/    |_|  |_| |__|  |__|  |_| \__\ |__|  \__/        
+                                                                              
+                      - O R C A' S   B I G   F R I E N D -                    
+                                      &                                       
+                       - I N T E G R A L  F E E D E R -                       
+                                                                              
+ v1 FN, 2020, v2 2021, v3 2022-2024                                           
+------------------------------------------------------------------------------
+
+
+----------------------
+SHARK INTEGRAL PACKAGE
+----------------------
+
+Number of atoms                             ...     17
+Number of basis functions                   ...    130
+Number of shells                            ...     66
+Maximum angular momentum                    ...      2
+Integral batch strategy                     ... SHARK/LIBINT Hybrid
+RI-J (if used) integral strategy            ... SPLIT-RIJ (Revised 2003 algorithm where possible)
+Printlevel                                  ...      1
+Contraction scheme used                     ... SEGMENTED contraction
+Prescreening option                         ... SCHWARTZ
+   Thresh                                   ... 1.000e-09
+   Tcut                                     ... 1.000e-10
+   Tpresel                                  ... 1.000e-10 
+Coulomb Range Separation                    ... NOT USED
+Exchange Range Separation                   ... NOT USED
+Multipole approximations                    ... NOT USED
+Finite Nucleus Model                        ... NOT USED
+CABS basis                                  ... NOT available
+Auxiliary Coulomb fitting basis             ... AVAILABLE
+   # of basis functions in Aux-J            ...    491
+   # of shells in Aux-J                     ...    165
+   Maximum angular momentum in Aux-J        ...      4
+Auxiliary J/K fitting basis                 ... NOT available
+Auxiliary Correlation fitting basis         ... NOT available
+Auxiliary 'external' fitting basis          ... NOT available
+
+Checking pre-screening integrals            ... done (  0.0 sec) Dimension = 66
+Check shell pair data                       ... done (  0.0 sec)
+Shell pair information
+Shell pair cut-off parameter TPreSel        ...   1.0e-10
+Total number of shell pairs                 ...      2211
+Shell pairs after pre-screening             ...      2092
+Total number of primitive shell pairs       ...      8909
+Primitive shell pairs kept                  ...      6002
+          la=0 lb=0:    830 shell pairs
+          la=1 lb=0:    652 shell pairs
+          la=1 lb=1:    135 shell pairs
+          la=2 lb=0:    314 shell pairs
+          la=2 lb=1:    126 shell pairs
+          la=2 lb=2:     35 shell pairs
+
+Calculating one electron integrals          ... done (  0.0 sec)
+Calculating RI/J V-Matrix + Cholesky decomp.... done (  0.1 sec)
+Calculating Nuclear repulsion               ... done (  0.0 sec) ENN=    346.151615043695 Eh
+
+Diagonalization of the overlap matrix:
+Smallest eigenvalue                        ... 6.078e-04
+Time for diagonalization                   ...    0.002 sec
+Threshold for overlap eigenvalues          ... 1.000e-07
+Number of eigenvalues below threshold      ... 0
+Time for construction of square roots      ...    0.012 sec
+Total time needed                          ...    0.021 sec
+
+-------------------
+DFT GRID GENERATION
+-------------------
+
+General Integration Accuracy     IntAcc      ... 4.159
+Radial Grid Type                 RadialGrid  ... OptM3 with GC (2021)
+Angular Grid (max. ang.)         AngularGrid ... 3 (Lebedev-194)
+Angular grid pruning method      GridPruning ... 4 (adaptive)
+Weight generation scheme         WeightScheme... mBecke (2022)
+Basis function cutoff            BFCut       ... 1.0000e-10
+Integration weight cutoff        WCut        ... 1.0000e-14
+Partially contracted basis set               ... off
+Rotationally invariant grid construction     ... off
+Angular grids for H and He will be reduced by one unit
+
+Total number of grid points                  ...    38845
+Total number of batches                      ...      618
+Average number of points per batch           ...       62
+Average number of grid points per atom       ...     2285
+Initializing property integral containers    ... done (  0.0 sec)
+
+SHARK setup successfully completed in   0.6 seconds
+
+Maximum memory used throughout the entire STARTUP-calculation: 19.2 MB
+-------------------------------------------------------------------------------
+                                 ORCA GUESS
+                   Start orbitals & Density for SCF / CASSCF
+-------------------------------------------------------------------------------
+
+------------
+SCF SETTINGS
+------------
+Hamiltonian:
+ Density Functional     Method          .... DFT(GTOs)
+ Exchange Functional    Exchange        .... PBE
+   PBE kappa parameter   XKappa         ....  0.804000
+   PBE mue parameter    XMuePBE         ....  0.219520
+ Correlation Functional Correlation     .... PBE
+   PBE beta parameter  CBetaPBE         ....  0.066725
+ LDA part of GGA corr.  LDAOpt          .... PW91-LDA
+ Gradients option       PostSCFGGA      .... off
+   NL short-range parameter             ....  6.400000
+ RI-approximation to the Coulomb term is turned on
+   Number of AuxJ basis functions       .... 491
+
+
+General Settings:
+ Integral files         IntName         .... sp
+ Hartree-Fock type      HFTyp           .... RHF
+ Total Charge           Charge          ....    0
+ Multiplicity           Mult            ....    1
+ Number of Electrons    NEL             ....   58
+ Basis Dimension        Dim             ....  130
+ Nuclear Repulsion      ENuc            ....    346.1516150437 Eh
+
+Convergence Acceleration:
+ AO-DIIS                CNVDIIS         .... on
+   Start iteration      DIISMaxIt       ....    12
+   Startup error        DIISStart       ....  0.200000
+   # of expansion vecs  DIISMaxEq       ....     5
+   Bias factor          DIISBfac        ....   1.050
+   Max. coefficient     DIISMaxC        ....  10.000
+ MO-DIIS                CNVKDIIS        .... off
+ Trust-Rad. Augm. Hess. CNVTRAH         .... auto
+   Auto Start mean grad. ratio tolernc. ....  1.125000
+   Auto Start start iteration           ....    50
+   Auto Start num. interpolation iter.  ....    10
+   Max. Number of Micro iterations      ....    24
+   Max. Number of Macro iterations      .... Maxiter - #DIIS iter
+   Number of Davidson start vectors     ....     2
+   Converg. threshold    (grad. norm)   ....   1.000e-04
+   Grad. Scal. Fac. for Micro threshold ....   0.100
+   Minimum threshold for Micro iter.    ....   1.000e-02
+   NR start threshold (gradient norm)   ....   1.000e-04
+   Initial trust radius                 ....   0.400
+   Minimum AH scaling param. (alpha)    ....   1.000
+   Maximum AH scaling param. (alpha)    .... 1000.000
+   Quad. conv. algorithm                .... NR
+   White noise on init. David. guess    .... on
+   Maximum white noise                  ....   0.010
+   Pseudo random numbers                .... off
+   Inactive MOs                         .... canonical
+   Orbital update algorithm             .... Taylor
+   Preconditioner                       .... Diag
+   Full preconditioner red. dimension   ....   250
+ SOSCF                  CNVSOSCF        .... on
+   Start iteration      SOSCFMaxIt      ....   150
+   Startup grad/error   SOSCFStart      ....  0.003300
+   Hessian update       SOSCFHessUp     .... L-BFGS
+ Level Shifting         CNVShift        .... on
+   Level shift para.    LevelShift      ....    0.2500
+   Turn off err/grad.   ShiftErr        ....    0.0010
+ Zerner damping         CNVZerner       .... off
+ Static damping         CNVDamp         .... on
+   Fraction old density DampFac         ....    0.7000
+   Max. Damping (<1)    DampMax         ....    0.9800
+   Min. Damping (>=0)   DampMin         ....    0.0000
+   Turn off err/grad.   DampErr         ....    0.1000
+
+SCF Procedure:
+ Maximum # iterations   MaxIter         ....   125
+ SCF integral mode      SCFMode         .... Direct
+   Integral package                     .... SHARK and LIBINT hybrid scheme
+ Reset frequency        DirectResetFreq ....    20
+ Integral Threshold     Thresh          ....  1.000e-09 Eh
+ Primitive CutOff       TCut            ....  1.000e-10 Eh
+
+Convergence Tolerance:
+ Convergence Check Mode ConvCheckMode   .... Total+1el-Energy
+ Convergence forced     ConvForced      .... 0
+ Energy Change          TolE            ....  1.000e-05 Eh
+ 1-El. energy change                    ....  1.000e-02 Eh
+ Orbital Gradient       TolG            ....  1.000e-04
+ Orbital Rotation angle TolX            ....  1.000e-04
+ DIIS Error             TolErr          ....  5.000e-04
+
+------------------------------
+INITIAL GUESS: MODEL POTENTIAL
+------------------------------
+Loading Hartree-Fock densities                     ... done
+Calculating cut-offs                               ... done
+Initializing the effective Hamiltonian             ... done
+Setting up the integral package (SHARK)            ... done
+Starting the Coulomb interaction                   ... done (   0.1 sec)
+Making the grid                                    ... done (   0.2 sec)
+Mapping shells                                     ... done
+Starting the XC term evaluation                    ... done (   0.1 sec)
+  promolecular density results
+     # of electrons  =     57.993939305
+     EX              =    -45.005021731
+     EC              =     -1.908915090
+     EX+EC           =    -46.913936821
+Transforming the Hamiltonian                       ... done (   0.0 sec)
+Diagonalizing the Hamiltonian                      ... done (   0.0 sec)
+Back transforming the eigenvectors                 ... done (   0.0 sec)
+Now organizing SCF variables                       ... done
+                      ------------------
+                      INITIAL GUESS DONE (   0.5 sec)
+                      ------------------
+             **** ENERGY FILE WAS UPDATED (sp.en.tmp) ****
+Finished Guess after   0.6 sec
+Maximum memory used throughout the entire GUESS-calculation: 14.9 MB
+
+-------------------------------------------------------------------------------------------
+                                      ORCA LEAN-SCF
+                              memory conserving SCF solver
+-------------------------------------------------------------------------------------------
+
+----------------------------------------D-I-I-S--------------------------------------------
+Iteration    Energy (Eh)           Delta-E    RMSDP     MaxDP     DIISErr   Damp  Time(sec)
+-------------------------------------------------------------------------------------------
+               ***  Starting incremental Fock matrix formation  ***
+    1    -326.0582480754947596     0.00e+00  4.19e-03  7.88e-02  1.56e-01  0.700   0.7
+    2    -326.1429125149060724    -8.47e-02  3.10e-03  4.64e-02  7.76e-02  0.700   0.7
+                               ***Turning on AO-DIIS***
+    3    -326.1746144523063435    -3.17e-02  1.27e-03  1.29e-02  2.55e-02  0.700   0.7
+    4    -326.1928033442378023    -1.82e-02  1.93e-03  2.61e-02  1.07e-02  0.000   0.7
+    5    -326.2330281354612111    -4.02e-02  5.10e-04  5.72e-03  5.36e-03  0.000   0.7
+                              *** Initializing SOSCF ***
+---------------------------------------S-O-S-C-F--------------------------------------
+Iteration    Energy (Eh)           Delta-E    RMSDP     MaxDP     MaxGrad    Time(sec)
+--------------------------------------------------------------------------------------
+    6    -326.2333741072042699    -3.46e-04  1.79e-04  2.29e-03  1.31e-03     0.7
+               *** Restarting incremental Fock matrix formation ***
+    7    -326.2333967186603445    -2.26e-05  1.23e-04  1.84e-03  2.83e-04     0.7
+    8    -326.2333961514104317     5.67e-07  4.18e-05  9.15e-04  3.48e-04     0.7
+                 **** Energy Check signals convergence ****
+
+               *****************************************************
+               *                     SUCCESS                       *
+               *           SCF CONVERGED AFTER   8 CYCLES          *
+               *****************************************************
+
+             **** ENERGY FILE WAS UPDATED (sp.en.tmp) ****
+
+----------------
+TOTAL SCF ENERGY
+----------------
+
+Total Energy       :       -326.23339615141043 Eh           -8877.26202 eV
+
+Components:
+Nuclear Repulsion  :        346.15161504369513 Eh            9419.26431 eV
+Electronic Energy  :       -672.38501119510556 Eh          -18296.52633 eV
+One Electron Energy:      -1125.21890662803639 Eh          -30618.76308 eV
+Two Electron Energy:        452.83389543293089 Eh           12322.23675 eV
+
+Virial components:
+Potential Energy   :       -649.63430639426838 Eh          -17677.44818 eV
+Kinetic Energy     :        323.40091024285800 Eh            8800.18616 eV
+Virial Ratio       :          2.00875843517702
+
+DFT components:
+N(Alpha)           :       29.000075236213 electrons
+N(Beta)            :       29.000075236213 electrons
+N(Total)           :       58.000150472426 electrons
+E(X)               :      -45.902316578711 Eh       
+E(C)               :       -1.924365655756 Eh       
+E(XC)              :      -47.826682234467 Eh       
+
+---------------
+SCF CONVERGENCE
+---------------
+
+  Last Energy change         ...   -5.6725e-07  Tolerance :   1.0000e-05
+  Last MAX-Density change    ...    9.1520e-04  Tolerance :   1.0000e-03
+  Last RMS-Density change    ...    4.1796e-05  Tolerance :   1.0000e-04
+  Last DIIS Error            ...    1.3139e-03  Tolerance :   5.0000e-04
+  Last Orbital Gradient      ...    3.4846e-04  Tolerance :   1.0000e-04
+  Last Orbital Rotation      ...    5.8149e-04  Tolerance :   1.0000e-04
+
+
+----------------
+ORBITAL ENERGIES
+----------------
+
+  NO   OCC          E(Eh)            E(eV) 
+   0   2.0000     -13.974259      -380.2589 
+   1   2.0000      -9.925374      -270.0832 
+   2   2.0000      -9.912890      -269.7435 
+   3   2.0000      -9.905773      -269.5498 
+   4   2.0000      -9.900766      -269.4135 
+   5   2.0000      -9.892902      -269.1996 
+   6   2.0000      -9.889838      -269.1162 
+   7   2.0000      -9.876757      -268.7602 
+   8   2.0000      -0.853070       -23.2132 
+   9   2.0000      -0.733214       -19.9518 
+  10   2.0000      -0.704505       -19.1706 
+  11   2.0000      -0.655629       -17.8406 
+  12   2.0000      -0.596271       -16.2254 
+  13   2.0000      -0.562158       -15.2971 
+  14   2.0000      -0.529243       -14.4014 
+  15   2.0000      -0.449971       -12.2443 
+  16   2.0000      -0.441053       -12.0017 
+  17   2.0000      -0.399176       -10.8621 
+  18   2.0000      -0.391608       -10.6562 
+  19   2.0000      -0.375725       -10.2240 
+  20   2.0000      -0.364792        -9.9265 
+  21   2.0000      -0.357903        -9.7390 
+  22   2.0000      -0.345604        -9.4044 
+  23   2.0000      -0.332137        -9.0379 
+  24   2.0000      -0.325718        -8.8632 
+  25   2.0000      -0.309354        -8.4180 
+  26   2.0000      -0.253792        -6.9060 
+  27   2.0000      -0.219230        -5.9656 
+  28   2.0000      -0.198045        -5.3891 
+  29   0.0000      -0.049383        -1.3438 
+  30   0.0000      -0.036353        -0.9892 
+  31   0.0000       0.046354         1.2613 
+  32   0.0000       0.057229         1.5573 
+  33   0.0000       0.073345         1.9958 
+  34   0.0000       0.082821         2.2537 
+  35   0.0000       0.096868         2.6359 
+  36   0.0000       0.102923         2.8007 
+  37   0.0000       0.123059         3.3486 
+  38   0.0000       0.126869         3.4523 
+  39   0.0000       0.142401         3.8749 
+*Only the first 10 virtual orbitals were printed.
+
+                    ********************************
+                    * MULLIKEN POPULATION ANALYSIS *
+                    ********************************
+
+-----------------------
+MULLIKEN ATOMIC CHARGES
+-----------------------
+   0 C :   -0.218607
+   1 C :   -0.016263
+   2 C :   -0.053997
+   3 C :   -0.085817
+   4 C :   -0.083722
+   5 N :   -0.064107
+   6 C :   -0.098700
+   7 C :   -0.182531
+   8 H :    0.122728
+   9 H :    0.115501
+  10 H :    0.104178
+  11 H :    0.046045
+  12 H :    0.043088
+  13 H :    0.050343
+  14 H :    0.117416
+  15 H :    0.088995
+  16 H :    0.115449
+Sum of atomic charges:   -0.0000000
+
+--------------------------------
+MULLIKEN REDUCED ORBITAL CHARGES
+--------------------------------
+  0 C s       :     3.023680  s :     3.023680
+      pz      :     1.074955  p :     3.166193
+      px      :     1.026768
+      py      :     1.064470
+      dz2     :     0.005455  d :     0.028734
+      dxz     :     0.006102
+      dyz     :     0.004965
+      dx2y2   :     0.005933
+      dxy     :     0.006279
+
+  1 C s       :     3.038172  s :     3.038172
+      pz      :     0.983043  p :     2.937066
+      px      :     0.988501
+      py      :     0.965521
+      dz2     :     0.002707  d :     0.041026
+      dxz     :     0.006767
+      dyz     :     0.005506
+      dx2y2   :     0.012307
+      dxy     :     0.013739
+
+  2 C s       :     3.208499  s :     3.208499
+      pz      :     0.972634  p :     2.810512
+      px      :     0.936659
+      py      :     0.901219
+      dz2     :     0.003056  d :     0.034986
+      dxz     :     0.005528
+      dyz     :     0.003162
+      dx2y2   :     0.010196
+      dxy     :     0.013044
+
+  3 C s       :     3.206376  s :     3.206376
+      pz      :     1.012255  p :     2.846342
+      px      :     0.933088
+      py      :     0.901000
+      dz2     :     0.003135  d :     0.033098
+      dxz     :     0.005005
+      dyz     :     0.002721
+      dx2y2   :     0.009594
+      dxy     :     0.012643
+
+  4 C s       :     3.088021  s :     3.088021
+      pz      :     0.950210  p :     2.934249
+      px      :     1.027339
+      py      :     0.956700
+      dz2     :     0.003543  d :     0.061452
+      dxz     :     0.007522
+      dyz     :     0.008874
+      dx2y2   :     0.022496
+      dxy     :     0.019018
+
+  5 N s       :     3.456009  s :     3.456009
+      pz      :     1.106636  p :     3.579894
+      px      :     1.101381
+      py      :     1.371877
+      dz2     :     0.003021  d :     0.028204
+      dxz     :     0.004738
+      dyz     :     0.004199
+      dx2y2   :     0.009581
+      dxy     :     0.006666
+
+  6 C s       :     3.222550  s :     3.222550
+      pz      :     0.969935  p :     2.821837
+      px      :     0.945089
+      py      :     0.906813
+      dz2     :     0.003895  d :     0.054313
+      dxz     :     0.009088
+      dyz     :     0.002898
+      dx2y2   :     0.015713
+      dxy     :     0.022719
+
+  7 C s       :     3.002215  s :     3.002215
+      pz      :     1.084031  p :     3.152884
+      px      :     1.028526
+      py      :     1.040327
+      dz2     :     0.005242  d :     0.027433
+      dxz     :     0.005551
+      dyz     :     0.005270
+      dx2y2   :     0.005969
+      dxy     :     0.005400
+
+  8 H s       :     0.877272  s :     0.877272
+
+  9 H s       :     0.884499  s :     0.884499
+
+ 10 H s       :     0.895822  s :     0.895822
+
+ 11 H s       :     0.953955  s :     0.953955
+
+ 12 H s       :     0.956912  s :     0.956912
+
+ 13 H s       :     0.949657  s :     0.949657
+
+ 14 H s       :     0.882584  s :     0.882584
+
+ 15 H s       :     0.911005  s :     0.911005
+
+ 16 H s       :     0.884551  s :     0.884551
+
+
+------------------------
+MULLIKEN OVERLAP CHARGES
+------------------------
+B(  0-C ,  1-C ) :   0.7909 B(  0-C ,  2-C ) :  -0.2065 B(  0-C ,  6-C ) :  -0.1652 
+B(  0-C ,  8-H ) :   0.7123 B(  0-C ,  9-H ) :   0.7206 B(  0-C , 10-H ) :   0.7134 
+B(  1-C ,  2-C ) :   0.7363 B(  1-C ,  3-C ) :   0.1405 B(  1-C ,  4-C ) :  -0.1770 
+B(  1-C ,  6-C ) :   0.7555 B(  1-C , 11-H ) :  -0.1540 B(  1-C , 13-H ) :  -0.1849 
+B(  2-C ,  3-C ) :   0.6786 B(  2-C ,  4-C ) :   0.0605 B(  2-C ,  5-N ) :  -0.1233 
+B(  2-C , 11-H ) :   0.8487 B(  2-C , 12-H ) :  -0.1593 B(  3-C ,  4-C ) :   0.8499 
+B(  3-C ,  5-N ) :  -0.0692 B(  3-C ,  6-C ) :  -0.1778 B(  3-C ,  7-C ) :  -0.2467 
+B(  3-C , 11-H ) :  -0.1530 B(  3-C , 12-H ) :   0.8020 B(  4-C ,  5-N ) :   1.0067 
+B(  4-C ,  6-C ) :  -0.0986 B(  4-C ,  7-C ) :   0.8136 B(  4-C , 12-H ) :  -0.1067 
+B(  5-N ,  6-C ) :   1.0868 B(  5-N ,  7-C ) :  -0.2035 B(  5-N , 13-H ) :  -0.0934 
+B(  6-C , 13-H ) :   0.8049 B(  7-C , 14-H ) :   0.6836 B(  7-C , 15-H ) :   0.6891 
+B(  7-C , 16-H ) :   0.6774 
+
+
+                     *******************************
+                     * LOEWDIN POPULATION ANALYSIS *
+                     *******************************
+
+----------------------
+LOEWDIN ATOMIC CHARGES
+----------------------
+   0 C :   -0.322333
+   1 C :   -0.074456
+   2 C :   -0.100835
+   3 C :   -0.140435
+   4 C :   -0.020374
+   5 N :   -0.075680
+   6 C :   -0.081621
+   7 C :   -0.330467
+   8 H :    0.136120
+   9 H :    0.132142
+  10 H :    0.125847
+  11 H :    0.123522
+  12 H :    0.124478
+  13 H :    0.110257
+  14 H :    0.137090
+  15 H :    0.120548
+  16 H :    0.136198
+
+-------------------------------
+LOEWDIN REDUCED ORBITAL CHARGES
+-------------------------------
+  0 C s       :     2.934233  s :     2.934233
+      pz      :     1.127978  p :     3.317038
+      px      :     1.065776
+      py      :     1.123284
+      dz2     :     0.013867  d :     0.071062
+      dxz     :     0.013592
+      dyz     :     0.012311
+      dx2y2   :     0.016473
+      dxy     :     0.014819
+
+  1 C s       :     2.857717  s :     2.857717
+      pz      :     0.961663  p :     3.107401
+      px      :     1.048622
+      py      :     1.097117
+      dz2     :     0.007453  d :     0.109338
+      dxz     :     0.012345
+      dyz     :     0.011996
+      dx2y2   :     0.037692
+      dxy     :     0.039851
+
+  2 C s       :     2.894917  s :     2.894917
+      pz      :     0.965212  p :     3.113749
+      px      :     1.083021
+      py      :     1.065517
+      dz2     :     0.007011  d :     0.092169
+      dxz     :     0.011897
+      dyz     :     0.006073
+      dx2y2   :     0.030695
+      dxy     :     0.036492
+
+  3 C s       :     2.898176  s :     2.898176
+      pz      :     1.003942  p :     3.152083
+      px      :     1.079963
+      py      :     1.068178
+      dz2     :     0.007331  d :     0.090176
+      dxz     :     0.010790
+      dyz     :     0.005351
+      dx2y2   :     0.030694
+      dxy     :     0.036011
+
+  4 C s       :     2.849968  s :     2.849968
+      pz      :     0.927976  p :     3.019174
+      px      :     1.040010
+      py      :     1.051187
+      dz2     :     0.008936  d :     0.151232
+      dxz     :     0.013114
+      dyz     :     0.017767
+      dx2y2   :     0.062236
+      dxy     :     0.049180
+
+  5 N s       :     3.208973  s :     3.208973
+      pz      :     1.105148  p :     3.804906
+      px      :     1.245360
+      py      :     1.454399
+      dz2     :     0.006628  d :     0.061801
+      dxz     :     0.009090
+      dyz     :     0.005921
+      dx2y2   :     0.023504
+      dxy     :     0.016657
+
+  6 C s       :     2.890225  s :     2.890225
+      pz      :     0.961408  p :     3.057614
+      px      :     1.028761
+      py      :     1.067446
+      dz2     :     0.008889  d :     0.133782
+      dxz     :     0.017540
+      dyz     :     0.005388
+      dx2y2   :     0.042512
+      dxy     :     0.059452
+
+  7 C s       :     2.941909  s :     2.941909
+      pz      :     1.132211  p :     3.319447
+      px      :     1.069940
+      py      :     1.117296
+      dz2     :     0.013589  d :     0.069111
+      dxz     :     0.012548
+      dyz     :     0.012841
+      dx2y2   :     0.016876
+      dxy     :     0.013258
+
+  8 H s       :     0.863880  s :     0.863880
+
+  9 H s       :     0.867858  s :     0.867858
+
+ 10 H s       :     0.874153  s :     0.874153
+
+ 11 H s       :     0.876478  s :     0.876478
+
+ 12 H s       :     0.875522  s :     0.875522
+
+ 13 H s       :     0.889743  s :     0.889743
+
+ 14 H s       :     0.862910  s :     0.862910
+
+ 15 H s       :     0.879452  s :     0.879452
+
+ 16 H s       :     0.863802  s :     0.863802
+
+
+---------------------------------
+LOEWDIN BOND ORDERS (THRESH 0.050000)
+---------------------------------
+B(  0-C ,  1-C ) :   1.1003 B(  0-C ,  2-C ) :   0.0737 B(  0-C ,  6-C ) :   0.0743 
+B(  0-C ,  8-H ) :   0.9220 B(  0-C ,  9-H ) :   0.9271 B(  0-C , 10-H ) :   0.9311 
+B(  1-C ,  2-C ) :   1.4452 B(  1-C ,  3-C ) :   0.0886 B(  1-C ,  4-C ) :   0.1143 
+B(  1-C ,  5-N ) :   0.0881 B(  1-C ,  6-C ) :   1.4285 B(  2-C ,  3-C ) :   1.5069 
+B(  2-C ,  4-C ) :   0.0909 B(  2-C ,  5-N ) :   0.1096 B(  2-C ,  6-C ) :   0.0919 
+B(  2-C , 11-H ) :   0.8838 B(  3-C ,  4-C ) :   1.4406 B(  3-C ,  5-N ) :   0.0829 
+B(  3-C ,  6-C ) :   0.1257 B(  3-C ,  7-C ) :   0.0772 B(  3-C , 12-H ) :   0.8818 
+B(  4-C ,  5-N ) :   1.5530 B(  4-C ,  6-C ) :   0.1057 B(  4-C ,  7-C ) :   1.1090 
+B(  5-N ,  6-C ) :   1.6510 B(  5-N ,  7-C ) :   0.0798 B(  6-C , 13-H ) :   0.8912 
+B(  7-C , 14-H ) :   0.9203 B(  7-C , 15-H ) :   0.9328 B(  7-C , 16-H ) :   0.9225 
+
+
+------------------------------------------
+LOEWDIN REDUCED ORBITAL POPULATIONS PER MO
+-------------------------------------------
+THRESHOLD FOR PRINTING IS 0.1%%
+                      0         1         2         3         4         5   
+                 -13.97426  -9.92537  -9.91289  -9.90577  -9.90077  -9.89290
+                   2.00000   2.00000   2.00000   2.00000   2.00000   2.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  px              0.0       0.0       0.0       0.1       0.0       0.0
+ 1 C  s               0.0       0.0       0.0      99.4       0.1       0.0
+ 1 C  py              0.0       0.0       0.1       0.0       0.1       0.0
+ 2 C  s               0.0       0.0       0.0       0.1      99.5       0.1
+ 2 C  px              0.0       0.0       0.0       0.0       0.0       0.2
+ 2 C  py              0.0       0.0       0.0       0.1       0.0       0.0
+ 3 C  s               0.0       0.0       0.0       0.0       0.0      99.5
+ 3 C  px              0.0       0.0       0.0       0.0       0.1       0.0
+ 3 C  py              0.0       0.1       0.0       0.0       0.0       0.0
+ 4 C  s               0.0      99.5       0.0       0.0       0.0       0.0
+ 4 C  py              0.1       0.0       0.0       0.0       0.0       0.1
+ 5 N  s              99.8       0.0       0.0       0.0       0.0       0.0
+ 5 N  px              0.0       0.0       0.2       0.0       0.0       0.0
+ 5 N  py              0.0       0.1       0.0       0.0       0.0       0.0
+ 6 C  s               0.0       0.0      99.5       0.0       0.0       0.0
+ 6 C  py              0.0       0.0       0.0       0.1       0.0       0.0
+ 7 C  px              0.0       0.1       0.0       0.0       0.0       0.0
+
+                      6         7         8         9        10        11   
+                  -9.88984  -9.87676  -0.85307  -0.73321  -0.70451  -0.65563
+                   2.00000   2.00000   2.00000   2.00000   2.00000   2.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s              99.7       0.0       0.4      10.8       1.5      17.5
+ 0 C  px              0.0       0.0       0.4       2.4       0.2       0.0
+ 1 C  s               0.0       0.0       4.1      22.7       1.3       1.4
+ 1 C  px              0.1       0.0       1.7       0.2       0.2       8.9
+ 1 C  py              0.0       0.0       0.3       1.1       4.2       0.9
+ 1 C  dz2             0.0       0.0       0.1       0.2       0.0       0.0
+ 1 C  dxy             0.0       0.0       0.0       0.0       0.1       0.0
+ 2 C  s               0.0       0.0       2.7      16.8       5.1       4.8
+ 2 C  px              0.0       0.0       0.3       0.3       4.1       2.6
+ 2 C  py              0.0       0.0       1.0       2.0       0.5       0.2
+ 2 C  dz2             0.0       0.0       0.0       0.2       0.0       0.0
+ 2 C  dx2y2           0.0       0.0       0.0       0.0       0.1       0.0
+ 3 C  s               0.0       0.0       4.2       3.0      18.4       3.7
+ 3 C  px              0.0       0.0       0.0       4.1       0.1       3.3
+ 3 C  py              0.0       0.0       2.4       0.2       0.5       0.3
+ 3 C  dz2             0.0       0.0       0.1       0.0       0.2       0.0
+ 3 C  dx2y2           0.0       0.0       0.0       0.1       0.0       0.0
+ 4 C  s               0.0       0.0      14.3       2.1      11.3       2.5
+ 4 C  px              0.0       0.1       2.9       0.4       1.1       8.1
+ 4 C  py              0.0       0.0       2.6       3.4       5.9       0.9
+ 4 C  dz2             0.0       0.0       0.3       0.0       0.1       0.0
+ 4 C  dxy             0.0       0.0       0.2       0.2       0.3       0.0
+ 5 N  s               0.0       0.0      31.8       6.2       3.4       0.0
+ 5 N  px              0.0       0.0       1.0       0.6       6.1       1.9
+ 5 N  py              0.0       0.0       3.3       0.5       1.5       0.1
+ 5 N  dz2             0.0       0.0       0.1       0.0       0.0       0.0
+ 5 N  dx2y2           0.0       0.0       0.0       0.0       0.2       0.0
+ 6 C  s               0.0       0.0      13.4       1.3       9.8       0.1
+ 6 C  px              0.0       0.0       5.2       6.2       0.5       1.2
+ 6 C  py              0.0       0.0       0.8       2.9       0.1       0.0
+ 6 C  dz2             0.0       0.0       0.3       0.0       0.1       0.0
+ 6 C  dx2y2           0.0       0.0       0.3       0.2       0.1       0.0
+ 6 C  dxy             0.0       0.0       0.0       0.1       0.0       0.0
+ 7 C  s               0.0      99.7       1.4       1.2       8.9      16.2
+ 7 C  px              0.0       0.0       1.4       0.3       1.2       0.2
+ 7 C  py              0.0       0.0       0.0       0.0       0.1       0.0
+ 8 H  s               0.1       0.0       0.1       1.9       0.3       4.2
+ 9 H  s               0.1       0.0       0.1       1.9       0.4       4.2
+10 H  s               0.1       0.0       0.1       2.1       0.2       3.9
+11 H  s               0.0       0.0       0.3       2.9       0.9       0.8
+12 H  s               0.0       0.0       0.4       0.4       3.7       0.6
+13 H  s               0.0       0.0       1.5       0.2       2.0       0.0
+14 H  s               0.0       0.1       0.2       0.2       1.6       3.7
+15 H  s               0.0       0.1       0.2       0.1       2.0       3.5
+16 H  s               0.0       0.1       0.2       0.2       1.6       3.7
+
+                     12        13        14        15        16        17   
+                  -0.59627  -0.56216  -0.52924  -0.44997  -0.44105  -0.39918
+                   2.00000   2.00000   2.00000   2.00000   2.00000   2.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s              12.5       0.9       2.0       0.5       0.6       0.0
+ 0 C  pz              0.0       0.0       0.0       0.0       0.0       0.2
+ 0 C  px              1.9       0.4       3.0       2.7       4.7       6.6
+ 0 C  py              0.1       1.3       0.2       2.5       5.1       0.1
+ 0 C  dx2y2           0.0       0.0       0.1       0.1       0.1       0.1
+ 1 C  s               2.7       0.7       5.5       0.1       0.7       3.0
+ 1 C  px              7.4       0.2       1.1       1.9       3.5       1.5
+ 1 C  py              1.4      13.9       1.9       6.6       6.3       0.4
+ 1 C  dx2y2           0.2       0.0       0.0       0.1       0.1       0.2
+ 1 C  dxy             0.0       0.1       0.0       0.0       0.0       0.1
+ 2 C  s               0.2       7.8       3.8       0.6       0.1       2.1
+ 2 C  px              0.6       8.1       0.4       0.1      19.2       0.1
+ 2 C  py              1.0       0.1      10.3      12.0       0.3       0.0
+ 2 C  dx2y2           0.1       0.1       0.1       0.0       0.1       0.0
+ 2 C  dxy             0.0       0.0       0.0       0.0       0.0       0.4
+ 3 C  s               1.4       9.7       0.8       0.2       0.2       1.1
+ 3 C  px              0.1       6.7       2.6       0.5      16.1       4.1
+ 3 C  py              0.2       0.1       8.3       8.5       0.0      20.7
+ 3 C  dx2y2           0.1       0.1       0.1       0.0       0.1       0.2
+ 3 C  dxy             0.0       0.0       0.0       0.0       0.1       0.5
+ 4 C  s               1.4       0.3       4.7       0.6       2.1       2.7
+ 4 C  px              6.7       0.3       0.9       1.8       2.4       0.2
+ 4 C  py              0.4      14.9       0.0       8.4       4.5       1.5
+ 4 C  dx2y2           0.3       0.0       0.1       0.1       0.0       0.2
+ 4 C  dxy             0.0       0.2       0.0       0.0       0.0       0.3
+ 5 N  s               1.8       1.7       2.2       0.2       0.2       1.8
+ 5 N  px              3.5       5.0       6.0      11.9       0.8       0.1
+ 5 N  py              1.9       1.1       6.7       0.2       2.2       0.2
+ 5 N  dx2y2           0.2       0.0       0.2       0.0       0.0       0.0
+ 5 N  dxy             0.0       0.0       0.0       0.2       0.0       0.1
+ 6 C  s               8.6       6.3       0.4       1.1       0.1       1.1
+ 6 C  px              2.1       1.3       8.1      12.8       0.9       1.8
+ 6 C  py              0.1       1.4       8.8       2.5       5.0      11.1
+ 6 C  dx2y2           0.1       0.0       0.3       0.0       0.0       0.3
+ 6 C  dxy             0.1       0.0       0.0       0.0       0.0       0.2
+ 7 C  s              14.1       0.4       2.7       0.6       0.8       0.0
+ 7 C  px              1.3       0.1       2.8       3.7       6.4       3.2
+ 7 C  py              0.0       1.3       0.0       2.4       3.1       0.0
+ 7 C  dx2y2           0.0       0.0       0.1       0.1       0.1       0.1
+ 8 H  s               3.9       0.5       1.0       0.3       1.5       0.2
+ 9 H  s               3.6       0.9       0.8       0.0       3.0       1.2
+10 H  s               4.4       0.0       1.9       2.1       0.1       0.6
+11 H  s               0.0       4.1       5.1       4.2       2.9       1.2
+12 H  s               0.2       5.0       1.7       2.0       0.9      18.3
+13 H  s               2.6       4.0       0.9       5.3       1.1      10.9
+14 H  s               4.1       0.3       1.4       0.2       2.1       0.2
+15 H  s               4.6       0.0       1.6       2.6       0.0       0.8
+16 H  s               4.0       0.4       1.3       0.1       2.4       0.1
+
+                     18        19        20        21        22        23   
+                  -0.39161  -0.37572  -0.36479  -0.35790  -0.34560  -0.33214
+                   2.00000   2.00000   2.00000   2.00000   2.00000   2.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  pz             21.4      24.6       0.0       0.0       0.0       0.0
+ 0 C  px              0.0       0.0       0.8      21.4       0.4       0.0
+ 0 C  py              0.0       0.0      15.8       3.0      24.7       0.3
+ 0 C  dz2             0.1       0.1       0.1       0.0       0.1       0.0
+ 0 C  dyz             0.1       0.1       0.1       0.0       0.2       0.0
+ 0 C  dx2y2           0.0       0.0       0.0       0.2       0.0       0.0
+ 0 C  dxy             0.0       0.0       0.0       0.1       0.4       0.0
+ 1 C  s               0.0       0.0       0.2       0.0       0.4       0.1
+ 1 C  pz             11.6       3.5       0.0       0.0       0.0       0.0
+ 1 C  px              0.0       0.0       0.7      18.7       0.0       0.0
+ 1 C  py              0.0       0.0       2.7       0.2       4.9       1.3
+ 1 C  dxz             0.0       0.1       0.0       0.0       0.0       0.0
+ 1 C  dx2y2           0.0       0.0       0.0       0.2       0.0       0.0
+ 1 C  dxy             0.0       0.0       0.0       0.2       0.9       0.2
+ 2 C  s               0.0       0.0       0.5       0.0       0.5       0.2
+ 2 C  pz              4.5       0.1       0.0       0.0       0.0       0.0
+ 2 C  px              0.0       0.0       3.1       0.3       0.1       4.1
+ 2 C  py              0.0       0.0       9.0       0.3       6.9       5.6
+ 2 C  dx2y2           0.0       0.0       0.3       0.4       0.0       0.1
+ 2 C  dxy             0.0       0.0       0.4       0.0       0.3       0.3
+ 3 C  s               0.0       0.0       1.6       0.4       0.0       0.0
+ 3 C  pz              4.2       1.2       0.0       0.0       0.0       0.0
+ 3 C  px              0.0       0.0       0.5       0.8       0.0       4.7
+ 3 C  py              0.1       0.0       0.2       6.1       0.3       1.8
+ 3 C  dx2y2           0.0       0.0       0.0       0.0       0.1       0.2
+ 3 C  dxy             0.0       0.0       0.2       0.1       0.1       0.2
+ 4 C  s               0.0       0.0       0.1       0.0       0.0       0.2
+ 4 C  pz             10.7       9.4       0.0       0.0       0.0       0.0
+ 4 C  px              0.0       0.0       0.0      11.4       6.4       1.3
+ 4 C  py              0.0       0.0       0.6       0.6       0.2       3.8
+ 4 C  dxy             0.0       0.0       0.3       0.0       0.1       0.3
+ 5 N  s               0.0       0.0       0.0       0.3       0.5       1.2
+ 5 N  pz              8.1       2.9       0.0       0.0       0.0       0.0
+ 5 N  px              0.0       0.0       1.0       0.0       0.6       4.8
+ 5 N  py              0.0       0.0       1.9       0.1       6.9       1.0
+ 5 N  dx2y2           0.0       0.0       0.0       0.2       0.1       0.0
+ 6 C  s               0.0       0.0       0.1       1.2       0.9       0.2
+ 6 C  pz              7.2       0.0       0.0       0.0       0.0       0.0
+ 6 C  px              0.0       0.0       0.2       0.1       4.1       0.7
+ 6 C  py              0.1       0.0       6.2       5.7       0.8       2.9
+ 6 C  dx2y2           0.0       0.0       0.1       0.2       0.0       0.1
+ 7 C  pz             11.8      25.4       0.0       0.0       0.0       0.0
+ 7 C  px              0.1       0.0       0.0      12.6       6.5       0.3
+ 7 C  py              0.0       0.0      16.7       0.3       2.6      28.9
+ 7 C  dz2             0.0       0.0       0.1       0.0       0.0       0.3
+ 7 C  dyz             0.1       0.2       0.0       0.0       0.0       0.0
+ 7 C  dx2y2           0.0       0.0       0.0       0.2       0.1       0.0
+ 7 C  dxy             0.0       0.0       0.1       0.0       0.0       0.5
+ 8 H  s               8.1      10.2       1.0       0.8       0.7       0.0
+ 9 H  s               4.0       5.0       4.6       0.0       7.2       0.0
+10 H  s               0.6       0.8       4.9       6.7      13.9       0.1
+11 H  s               0.0       0.0      10.3       0.0       3.6       6.7
+12 H  s               0.1       0.0       0.6       2.7       0.2       0.1
+13 H  s               0.1       0.0       3.3       0.9       0.4       1.9
+14 H  s               3.5       8.8       1.6       0.7       0.0       4.0
+15 H  s               0.1       0.1       7.0       1.9       3.6      14.8
+16 H  s               3.1       6.7       2.7       0.6       0.0       6.4
+
+                     24        25        26        27        28        29   
+                  -0.32572  -0.30935  -0.25379  -0.21923  -0.19805  -0.04938
+                   2.00000   2.00000   2.00000   2.00000   2.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.0       0.4       0.0       0.0       0.1       0.0
+ 0 C  pz              7.6       0.0       0.4       2.0       0.0       0.1
+ 0 C  px              0.0       7.7       0.0       0.0       0.7       0.0
+ 0 C  py              0.0       2.7       0.0       0.0       0.0       0.1
+ 0 C  dxz             0.1       0.0       0.1       0.4       0.0       0.1
+ 0 C  dxy             0.0       0.1       0.0       0.0       0.1       0.0
+ 1 C  s               0.0       0.1       0.0       0.0       0.5       0.0
+ 1 C  pz              4.1       0.0       3.9      24.8       0.0       3.2
+ 1 C  px              0.0       5.3       0.0       0.0       1.0       0.0
+ 1 C  py              0.0       5.3       0.0       0.0       3.3       0.0
+ 1 C  dxz             0.3       0.0       0.0       0.2       0.0       0.0
+ 1 C  dyz             0.0       0.0       0.6       0.0       0.0       1.5
+ 1 C  dx2y2           0.0       0.7       0.0       0.0       0.1       0.0
+ 1 C  dxy             0.0       0.1       0.0       0.0       0.0       0.0
+ 2 C  pz              6.9       0.0      34.7       2.1       0.0      31.1
+ 2 C  px              0.0      10.5       0.0       0.0       0.0       0.0
+ 2 C  py              0.0       3.6       0.0       0.0       0.2       0.0
+ 2 C  dxz             0.0       0.0       0.1       0.4       0.0       0.2
+ 2 C  dyz             0.0       0.0       0.0       0.2       0.0       0.2
+ 2 C  dx2y2           0.0       0.2       0.0       0.0       0.0       0.0
+ 2 C  dxy             0.0       0.0       0.0       0.0       0.2       0.0
+ 3 C  s               0.0       0.1       0.0       0.0       0.6       0.0
+ 3 C  pz              6.6       0.0      22.4      15.9       0.0      11.4
+ 3 C  px              0.0       9.2       0.0       0.0       1.0       0.0
+ 3 C  py              0.0       0.6       0.0       0.0       3.0       0.0
+ 3 C  dxz             0.0       0.0       0.3       0.2       0.0       1.1
+ 3 C  dyz             0.0       0.0       0.0       0.1       0.0       0.0
+ 3 C  dx2y2           0.0       0.4       0.0       0.0       0.1       0.0
+ 3 C  dxy             0.0       0.4       0.0       0.0       0.1       0.0
+ 4 C  s               0.0       0.1       0.0       0.0       0.5       0.0
+ 4 C  pz              3.8       0.0       0.2      22.3       0.0       4.6
+ 4 C  px              0.0       7.9       0.0       0.0       0.1       0.0
+ 4 C  py              0.0       0.5       0.0       0.0       4.1       0.0
+ 4 C  dxz             0.5       0.0       0.0       0.1       0.0       0.0
+ 4 C  dyz             0.0       0.0       0.8       0.1       0.0       1.5
+ 4 C  dx2y2           0.0       0.8       0.0       0.0       1.3       0.0
+ 4 C  dxy             0.0       0.0       0.0       0.0       0.5       0.0
+ 5 N  s               0.0       0.0       0.0       0.0       9.2       0.0
+ 5 N  pz             17.0       0.0      25.3       1.8       0.0      26.0
+ 5 N  px              0.0       4.2       0.0       0.0      14.6       0.0
+ 5 N  py              0.0       1.4       0.0       0.0      43.5       0.0
+ 5 N  dz2             0.0       0.0       0.0       0.0       0.2       0.0
+ 5 N  dxz             0.1       0.0       0.1       0.3       0.0       0.1
+ 5 N  dyz             0.0       0.0       0.0       0.1       0.0       0.0
+ 5 N  dx2y2           0.0       0.2       0.0       0.0       0.0       0.0
+ 6 C  s               0.0       0.1       0.0       0.0       0.3       0.0
+ 6 C  pz             14.2       0.0       9.4      17.2       0.0      15.5
+ 6 C  px              0.0       2.8       0.0       0.0       3.1       0.0
+ 6 C  py              0.0       3.5       0.0       0.0       1.4       0.0
+ 6 C  dxz             0.1       0.0       0.4       0.2       0.0       1.1
+ 6 C  dyz             0.0       0.0       0.0       0.1       0.0       0.0
+ 6 C  dx2y2           0.0       0.5       0.0       0.0       0.0       0.0
+ 6 C  dxy             0.0       0.4       0.0       0.0       1.9       0.0
+ 7 C  s               0.0       0.3       0.0       0.0       0.6       0.0
+ 7 C  pz             17.2       0.0       0.2       2.0       0.0       0.1
+ 7 C  px              0.0      11.3       0.0       0.0       2.0       0.0
+ 7 C  py              0.1       0.2       0.0       0.0       0.1       0.0
+ 7 C  dxz             0.2       0.0       0.0       0.4       0.0       0.1
+ 7 C  dyz             0.2       0.0       0.0       0.1       0.0       0.1
+ 8 H  s               4.1       1.0       0.6       2.8       0.0       0.1
+ 9 H  s               2.3       2.4       0.3       1.4       0.0       0.1
+10 H  s               0.3       0.4       0.0       0.2       0.4       0.2
+11 H  s               0.0       0.0       0.0       0.0       0.7       0.0
+12 H  s               0.0       5.7       0.0       0.0       1.0       0.0
+13 H  s               0.0       6.4       0.0       0.0       2.9       0.0
+14 H  s               7.2       0.7       0.0       2.4       0.2       0.7
+15 H  s               0.0       0.7       0.0       0.0       0.1       0.0
+16 H  s               6.7       0.6       0.0       2.0       0.2       0.7
+
+                     30        31        32        33        34        35   
+                  -0.03635   0.04635   0.05723   0.07335   0.08282   0.09687
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.0       7.2      10.7       2.9       0.2       3.3
+ 0 C  pz              0.2       0.0       0.0       0.4       7.6       0.0
+ 0 C  px              0.0       5.1       0.9       0.1       0.0       0.4
+ 0 C  py              0.0       0.3       0.4       2.4       0.0       7.6
+ 0 C  dz2             0.0       0.0       0.0       0.0       0.2       0.2
+ 0 C  dxz             0.8       0.0       0.0       0.0       0.6       0.0
+ 0 C  dyz             0.1       0.0       0.0       0.0       0.2       0.1
+ 0 C  dx2y2           0.0       0.2       0.0       0.1       0.1       0.0
+ 1 C  s               0.0       0.5       0.0       0.2       0.1       0.1
+ 1 C  pz             24.8       0.0       0.0       0.0       6.2       0.5
+ 1 C  px              0.0       0.4       0.1       0.3       0.0       1.0
+ 1 C  py              0.0       0.2       0.2       0.4       0.0       0.7
+ 1 C  dz2             0.0       0.0       0.1       0.1       0.0       0.0
+ 1 C  dxz             0.2       0.0       0.0       0.0       0.8       0.0
+ 1 C  dyz             0.2       0.0       0.0       0.0       0.0       0.0
+ 1 C  dx2y2           0.0       0.4       0.1       0.1       0.0       1.3
+ 1 C  dxy             0.0       0.1       0.1       0.3       0.0       0.5
+ 2 C  s               0.0       3.5       0.2       1.3       0.0       0.3
+ 2 C  pz              0.7       0.0       0.0       0.0       9.2       0.2
+ 2 C  px              0.0       1.9       0.1       0.2       0.0       0.5
+ 2 C  py              0.0       3.7       0.4       3.3       0.0       0.6
+ 2 C  dxz             1.0       0.0       0.0       0.0       0.1       0.0
+ 2 C  dyz             0.5       0.0       0.0       0.0       0.2       0.0
+ 2 C  dx2y2           0.0       0.0       0.1       0.0       0.0       0.4
+ 2 C  dxy             0.0       0.4       0.3       0.2       0.0       0.0
+ 3 C  s               0.0       1.4       3.0       0.2       0.1       0.6
+ 3 C  pz             17.1       0.0       0.0       0.1      11.2       0.2
+ 3 C  px              0.0       1.2       0.8       0.1       0.0       0.1
+ 3 C  py              0.0       2.2       3.4       0.7       0.2       0.3
+ 3 C  dxz             0.2       0.0       0.0       0.0       0.1       0.0
+ 3 C  dyz             0.6       0.0       0.0       0.0       0.3       0.0
+ 3 C  dx2y2           0.0       0.1       0.0       0.2       0.0       0.0
+ 3 C  dxy             0.0       0.5       0.1       0.3       0.0       0.0
+ 4 C  s               0.0       0.3       0.1       0.3       0.1       0.1
+ 4 C  pz             25.5       0.0       0.0       0.1       7.9       0.1
+ 4 C  px              0.0       0.2       0.3       0.3       0.0       0.0
+ 4 C  py              0.0       0.4       0.5       0.1       0.0       0.3
+ 4 C  dz2             0.0       0.0       0.1       0.3       0.0       0.0
+ 4 C  dxz             0.1       0.0       0.0       0.0       0.5       0.0
+ 4 C  dyz             0.2       0.0       0.0       0.0       0.0       0.0
+ 4 C  dx2y2           0.0       0.3       0.1       0.1       0.0       0.1
+ 4 C  dxy             0.0       0.1       0.2       0.1       0.0       0.0
+ 5 N  s               0.0       0.1       0.6       0.2       0.0       0.0
+ 5 N  pz              0.3       0.0       0.0       0.1       6.7       0.3
+ 5 N  px              0.0       0.1       0.0       0.1       0.0       0.6
+ 5 N  py              0.0       0.2       0.1       0.2       0.0       0.1
+ 5 N  dxz             0.7       0.0       0.0       0.0       0.0       0.0
+ 5 N  dyz             0.3       0.0       0.0       0.0       0.1       0.0
+ 5 N  dxy             0.0       0.0       0.0       0.0       0.0       0.4
+ 6 C  s               0.0       1.7       0.4       0.2       0.2       3.6
+ 6 C  pz             17.3       0.0       0.0       0.1       5.9       0.6
+ 6 C  px              0.0       0.7       0.2       0.0       0.1       1.8
+ 6 C  py              0.0       0.4       0.5       0.4       0.5       8.5
+ 6 C  dz2             0.0       0.0       0.0       0.1       0.0       0.1
+ 6 C  dxz             0.2       0.0       0.0       0.0       0.1       0.0
+ 6 C  dyz             0.6       0.0       0.0       0.0       0.1       0.0
+ 6 C  dx2y2           0.0       0.0       0.1       0.0       0.0       0.5
+ 7 C  s               0.0       0.4       5.9      15.4       0.3       1.0
+ 7 C  pz              0.0       0.0       0.0       0.0       2.8       0.4
+ 7 C  px              0.0       1.3       2.6       1.9       0.0       0.1
+ 7 C  py              0.0       0.3       0.9       0.6       0.3       0.0
+ 7 C  dxz             0.8       0.0       0.0       0.0       0.5       0.0
+ 7 C  dyz             0.1       0.0       0.0       0.0       0.2       0.0
+ 7 C  dx2y2           0.0       0.1       0.1       0.0       0.0       0.0
+ 8 H  s               2.5       5.6       9.8       7.1      16.1       0.4
+ 9 H  s               1.6       5.8      11.1       5.5       5.8       2.0
+10 H  s               0.1      13.5       4.6       0.6       0.3      20.9
+11 H  s               0.0      20.3       0.9      10.7       0.0       0.6
+12 H  s               0.0      10.0      17.5       1.3       0.6       1.2
+13 H  s               0.0       5.2       2.2       1.0       1.7      33.7
+14 H  s               1.7       0.3       3.3      15.4       9.5       2.7
+15 H  s               0.0       2.7      13.7       6.4       0.2       0.3
+16 H  s               1.3       0.2       2.9      17.1       1.4       0.1
+
+                     36        37        38        39        40        41   
+                   0.10292   0.12306   0.12687   0.14240   0.15073   0.18559
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               2.0       0.0       0.2       0.5       0.2       1.0
+ 0 C  pz              0.0       3.6       8.4       0.3       6.7       0.4
+ 0 C  px              0.3       0.1       0.1       0.6       0.3      14.3
+ 0 C  py              4.9       5.4       2.7       1.4       0.0       1.0
+ 0 C  dz2             0.0       0.4       0.0       0.1       0.2       0.8
+ 0 C  dxz             0.0       0.0       0.0       0.0       0.1       0.0
+ 0 C  dyz             0.2       0.1       0.6       0.2       0.1       0.0
+ 0 C  dx2y2           0.2       0.2       0.0       0.1       0.0       3.4
+ 0 C  dxy             0.1       0.4       0.2       0.2       0.0       0.0
+ 1 C  s               0.4       0.7       0.0       0.1       0.1      13.2
+ 1 C  pz              0.8       1.1       1.6       0.8       6.8       0.0
+ 1 C  px              0.7       0.0       0.1       0.5       0.3       2.9
+ 1 C  py              0.1       0.5       0.2       0.3       0.0       0.0
+ 1 C  dz2             0.0       0.2       0.0       0.0       0.0       2.4
+ 1 C  dxz             0.0       0.0       0.1       0.0       0.0       0.0
+ 1 C  dx2y2           0.4       0.1       0.1       0.3       0.2       0.0
+ 1 C  dxy             0.3       0.3       0.1       0.3       0.0       0.0
+ 2 C  s               0.5       3.5       0.6       2.9       0.3       1.8
+ 2 C  pz              1.2       0.7       0.4       0.3       4.0       0.0
+ 2 C  px              0.4       0.7       0.2       0.6       0.3       0.8
+ 2 C  py              1.6       1.1       0.4       1.2       0.1       0.8
+ 2 C  dz2             0.0       0.1       0.0       0.2       0.0       0.0
+ 2 C  dyz             0.0       0.1       0.1       0.0       0.3       0.0
+ 2 C  dxy             0.0       0.1       0.0       0.0       0.0       1.5
+ 3 C  s               0.3       0.6       0.0       5.8       0.3       1.1
+ 3 C  pz              1.0       0.1       0.0       0.4       4.5       0.0
+ 3 C  px              0.3       0.5       0.2       1.5       0.4       1.2
+ 3 C  py              2.7       0.3       0.1       2.9       0.4       0.7
+ 3 C  dz2             0.0       0.0       0.0       0.4       0.0       0.0
+ 3 C  dyz             0.0       0.0       0.0       0.0       0.3       0.0
+ 3 C  dx2y2           0.0       0.3       0.0       0.1       0.0       0.3
+ 3 C  dxy             0.0       0.0       0.0       0.1       0.0       1.4
+ 4 C  s               0.5       0.8       0.1       0.0       0.0      10.6
+ 4 C  pz              0.5       0.1       0.5       0.9       6.9       0.0
+ 4 C  px              0.3       0.1       0.0       1.3       0.2       1.1
+ 4 C  py              0.4       0.0       0.0       0.7       0.1       0.3
+ 4 C  dz2             0.0       0.2       0.0       0.0       0.0       2.3
+ 4 C  dxz             0.0       0.1       0.3       0.0       0.0       0.0
+ 4 C  dx2y2           0.0       0.0       0.0       0.6       0.1       0.0
+ 4 C  dxy             0.8       0.1       0.0       0.6       0.0       0.0
+ 5 N  s               0.0       0.4       0.0       0.7       0.3       3.5
+ 5 N  pz              0.3       0.0       0.1       1.2       7.8       0.0
+ 5 N  px              0.0       0.7       0.1       0.2       0.1       0.1
+ 5 N  py              0.3       0.1       0.0       0.1       0.0       0.1
+ 5 N  dyz             0.0       0.0       0.0       0.0       0.1       0.0
+ 5 N  dx2y2           0.0       0.0       0.0       0.4       0.1       0.0
+ 5 N  dxy             0.1       0.1       0.0       0.0       0.0       0.5
+ 6 C  s               1.4       1.3       1.5       1.1       0.0       2.8
+ 6 C  pz              0.4       0.4       1.6       0.9       6.0       0.0
+ 6 C  px              0.3       1.6       0.6       0.6       0.6       4.4
+ 6 C  py              0.8       1.6       1.4       0.0       0.0       0.1
+ 6 C  dz2             0.1       0.2       0.1       0.1       0.0       0.2
+ 6 C  dyz             0.0       0.1       0.1       0.0       0.2       0.0
+ 6 C  dx2y2           0.1       0.3       0.0       0.4       0.2       0.3
+ 6 C  dxy             0.0       0.0       0.0       0.0       0.0       1.3
+ 7 C  s               1.2       0.1       0.0       1.4       0.2       0.6
+ 7 C  pz              0.2       3.6      10.3       1.0       9.3       0.1
+ 7 C  px              0.0       0.3       0.0       0.9       0.2       8.7
+ 7 C  py              9.3       5.6       1.5       6.3       0.4       0.4
+ 7 C  dz2             0.2       0.2       0.0       0.6       0.2       0.5
+ 7 C  dyz             0.1       0.1       0.6       0.1       0.2       0.0
+ 7 C  dx2y2           0.1       0.2       0.0       0.0       0.0       2.1
+ 7 C  dxy             0.1       0.1       0.0       0.5       0.0       0.0
+ 8 H  s               3.1       7.8       7.6       0.8       7.8       1.3
+ 9 H  s               9.9       0.4      17.8       1.5       6.1       0.7
+10 H  s               3.1      14.1       0.9       2.6       1.0       1.6
+11 H  s               6.3       8.7       2.3      10.9       1.0       0.9
+12 H  s               7.9       0.9       0.1      20.6       2.3       0.9
+13 H  s               5.4       5.6       7.4       0.5       0.1       3.4
+14 H  s               4.5      10.0       8.8       0.7      11.6       0.7
+15 H  s               8.9      12.6       1.1      15.1       2.0       0.5
+16 H  s              14.3       0.2      18.5       4.4       8.2       0.5
+
+                     42        43        44        45        46        47   
+                   0.20998   0.22096   0.26578   0.27835   0.30463   0.31667
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.3       0.4       0.3       0.7       0.5       0.1
+ 0 C  pz              0.0       0.3       2.0       0.4       0.0       0.0
+ 0 C  px             10.6       8.4       2.4       2.7       1.6       0.9
+ 0 C  py              0.1       1.8       0.9       0.4       0.6       6.9
+ 0 C  dz2             0.6       0.7       0.7       0.4       0.2       0.1
+ 0 C  dyz             0.0       0.0       0.0       0.0       0.0       0.4
+ 0 C  dx2y2           2.4       1.8       0.2       0.3       0.0       0.6
+ 0 C  dxy             0.1       0.0       0.2       0.4       2.4       0.2
+ 1 C  s               2.4       7.2       7.4       4.7       1.1       1.9
+ 1 C  px              4.9       2.0       3.7       4.4       2.0       0.2
+ 1 C  py              0.0       0.0       0.7       3.2      10.7       3.9
+ 1 C  dz2             0.4       0.1       1.5       0.1       0.3       0.0
+ 1 C  dx2y2           0.3       0.6       2.5       0.3       0.0       0.0
+ 1 C  dxy             0.1       0.2       0.8       0.9       4.4       0.5
+ 2 C  s               2.4       1.3       4.0      11.6       1.4       0.8
+ 2 C  px              0.6       1.8       9.2       0.8       0.5       6.0
+ 2 C  py              1.0       2.0       0.9       5.0       1.3       2.6
+ 2 C  dz2             0.1       0.0       0.9       4.1       0.4       0.4
+ 2 C  dx2y2           0.6       0.1       5.7       0.6       0.5       2.4
+ 2 C  dxy             0.0       0.7       0.0       2.8       0.7       1.3
+ 3 C  s               1.8       3.5       5.0       5.1       2.1       5.9
+ 3 C  px              0.1       0.4       8.7       4.9       0.7       1.0
+ 3 C  py              0.0       0.9       0.1       5.1       1.0       2.4
+ 3 C  dz2             0.4       0.4       1.2       1.2       0.0       0.6
+ 3 C  dx2y2           0.8       0.8       3.5       3.9       0.8       0.0
+ 3 C  dxy             0.7       0.4       0.0       3.0       0.4       0.7
+ 4 C  s               8.8       6.5       5.1       4.4       3.3       9.4
+ 4 C  px              9.9       1.3       1.6       5.9       2.0       1.2
+ 4 C  py              0.8       4.0       1.3       1.8       3.3       4.5
+ 4 C  dz2             0.5       1.4       1.0       0.1       1.5       1.8
+ 4 C  dx2y2           1.1       0.2       1.0       0.7       1.2       0.1
+ 4 C  dxy             0.5       1.5       0.7       0.0       0.2       0.9
+ 5 N  s               0.8      12.9       0.3       0.2       0.5       0.5
+ 5 N  px              0.1       1.2       2.1       0.0       7.3       0.7
+ 5 N  py              0.8       1.3       2.9       0.9       1.9       0.6
+ 5 N  dz2             0.0       0.1       0.1       0.3       0.1       0.8
+ 5 N  dx2y2           0.2       0.1       0.1       0.3       1.8       0.6
+ 5 N  dxy             0.1       0.1       0.0       0.0       1.8       0.2
+ 6 C  s               1.3       6.9       0.4       1.8      17.1       9.7
+ 6 C  pz              0.0       0.0       0.2       0.0       0.1       0.1
+ 6 C  px              0.9       7.9       6.8       0.4       0.0       5.1
+ 6 C  py              0.1       0.1       2.6       0.2       5.0       3.7
+ 6 C  dz2             0.1       2.3       0.0       0.4       5.6       0.3
+ 6 C  dx2y2           0.0       2.5       2.7       1.7       0.1       1.4
+ 6 C  dxy             0.0       0.0       0.2       0.1       3.6       0.8
+ 7 C  s               1.3       0.2       0.3       0.2       0.0       0.3
+ 7 C  px             25.6       0.8       1.7       2.9       0.1       3.4
+ 7 C  py              0.0       0.2       0.0       0.7       1.0       2.5
+ 7 C  dz2             1.4       0.0       0.0       0.1       0.2       0.3
+ 7 C  dx2y2           5.6       0.0       0.6       0.6       0.1       0.2
+ 7 C  dxy             0.5       0.8       0.3       0.0       0.3       0.1
+ 8 H  s               0.4       0.7       0.5       0.9       0.2       0.2
+ 9 H  s               0.4       0.7       0.8       0.5       1.1       1.0
+10 H  s               1.0       1.8       0.8       2.3       2.5       3.1
+11 H  s               0.5       4.6       0.5       1.5       0.7       2.2
+12 H  s               2.8       0.9       0.2       0.3       3.1       1.0
+13 H  s               0.6       0.7       1.7       1.9       0.3       0.7
+14 H  s               0.5       0.2       0.3       0.1       0.0       0.8
+15 H  s               2.3       1.6       0.0       1.4       0.1       1.2
+16 H  s               0.4       0.2       0.7       0.0       0.1       0.6
+
+                     48        49        50        51        52        53   
+                   0.36031   0.36781   0.38488   0.40590   0.41424   0.42830
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               1.3       0.0       0.9       0.1       0.2       3.4
+ 0 C  pz              0.1       0.0       5.2      16.6       0.0       1.6
+ 0 C  px             10.8       2.9       5.0       0.7       1.1      14.6
+ 0 C  py              8.7       0.0       2.6       0.1       0.0       0.4
+ 0 C  dz2             1.0       0.0       0.2       1.6       0.0       0.2
+ 0 C  dxz             0.0       0.0       0.0       0.5       0.0       0.2
+ 0 C  dyz             0.6       0.0       1.5       1.9       0.0       0.0
+ 0 C  dx2y2           0.3       0.1       0.0       0.5       0.0       0.5
+ 0 C  dxy             0.2       0.3       0.1       0.1       0.0       0.0
+ 1 C  s               6.7       4.3       6.1       0.0       0.2       4.4
+ 1 C  pz              0.0       0.0       1.3       9.4       0.3       2.2
+ 1 C  px              0.9       0.3       0.0       0.2       0.1       0.3
+ 1 C  py              1.3       1.9       0.5       0.1       0.1       1.2
+ 1 C  dz2             1.2       0.2       2.1       0.0       0.1       3.7
+ 1 C  dxz             0.0       0.0       0.1       0.7       0.0       0.1
+ 1 C  dx2y2           0.7       0.6       0.0       0.1       0.0       0.1
+ 1 C  dxy             0.6       0.8       0.0       0.0       0.0       0.0
+ 2 C  s              11.2       1.5       5.1       4.0       0.9       4.6
+ 2 C  pz              0.1       0.0       2.8      13.6       1.0       1.6
+ 2 C  px              2.0       2.0       4.1       0.9       0.3       2.7
+ 2 C  py              0.6       1.2       0.7       0.5       0.0       0.6
+ 2 C  dz2             1.6       0.0       0.1       1.5       0.4       2.6
+ 2 C  dyz             0.0       0.0       0.1       0.4       0.0       0.0
+ 2 C  dx2y2           1.1       0.3       0.2       0.4       0.0       0.0
+ 2 C  dxy             0.8       0.4       0.1       0.2       0.0       0.0
+ 3 C  s               2.5      15.9       2.8       0.3       0.1       1.9
+ 3 C  pz              0.0       0.0       0.1       0.6      22.9       0.9
+ 3 C  px              1.1       0.6       4.0       4.3       1.3       4.9
+ 3 C  py              1.6       0.1       3.0       1.3       0.2       0.5
+ 3 C  dz2             0.4       4.7       1.8       0.0       0.0       0.1
+ 3 C  dyz             0.0       0.0       0.0       0.0       0.5       0.1
+ 3 C  dx2y2           0.1       0.4       0.4       0.1       0.0       0.8
+ 3 C  dxy             1.5       0.2       0.0       0.2       0.0       0.0
+ 4 C  s               0.1       8.4       3.7       1.8       0.0       0.1
+ 4 C  pz              0.0       0.0       0.0       0.9      13.4       0.5
+ 4 C  px              0.3       0.7       0.1       0.2       0.0       1.1
+ 4 C  py              4.6       0.8       1.7       0.3       0.1       2.8
+ 4 C  dz2             0.1       1.0       1.6       0.2       0.1       0.0
+ 4 C  dxz             0.0       0.0       0.0       0.0       0.8       0.2
+ 4 C  dx2y2           0.0       1.0       0.0       0.0       0.0       0.8
+ 4 C  dxy             1.9       0.1       2.3       0.3       0.0       0.2
+ 5 N  s               2.3       0.4       0.2       0.3       0.0       0.5
+ 5 N  pz              0.0       0.0       0.0       0.2       0.0       0.0
+ 5 N  px              0.4       0.3       1.1       0.4       0.1       0.1
+ 5 N  py              0.6       0.4       0.1       0.0       0.0       0.1
+ 5 N  dz2             0.1       0.1       0.3       0.2       0.0       0.2
+ 5 N  dyz             0.0       0.0       0.0       0.0       0.1       0.0
+ 5 N  dx2y2           0.3       0.6       0.5       0.2       0.0       0.2
+ 5 N  dxy             0.2       0.0       0.0       0.0       0.1       0.7
+ 6 C  s               0.5      11.1       0.0       0.8       0.5       2.1
+ 6 C  pz              0.2       0.0       0.2       5.4       1.2       2.7
+ 6 C  px              2.0       1.3       8.8       1.0       0.0       4.5
+ 6 C  py              0.7       0.6       1.3       0.1       0.1       1.1
+ 6 C  dz2             0.1       1.7       0.0       0.0       0.0       0.4
+ 6 C  dyz             0.0       0.0       0.0       0.3       0.0       0.1
+ 6 C  dx2y2           0.0       0.5       0.1       0.1       0.0       0.0
+ 6 C  dxy             0.0       0.2       0.1       0.0       0.1       0.8
+ 7 C  s               0.1       1.1       0.5       0.0       0.0       0.6
+ 7 C  pz              0.0       0.0       0.9       0.0      25.3       4.0
+ 7 C  px              0.7       7.8       2.4       0.1       0.1       3.5
+ 7 C  py              0.8       2.4       4.6       4.6       1.6       2.3
+ 7 C  dz2             0.2       0.5       1.1       0.7       0.0       0.8
+ 7 C  dxz             0.0       0.0       0.0       0.0       0.6       0.1
+ 7 C  dyz             0.0       0.1       0.0       0.1       5.9       0.4
+ 7 C  dx2y2           0.1       0.1       0.1       0.3       0.0       0.0
+ 7 C  dxy             1.1       0.2       1.7       0.4       0.0       0.0
+ 8 H  s               0.8       0.1       1.4       9.1       0.0       0.7
+ 9 H  s               3.6       0.0       2.6       3.4       0.0       1.0
+10 H  s               1.1       0.9       1.1       1.0       0.1       2.0
+11 H  s              10.1       0.1       0.1       2.9       0.4       3.6
+12 H  s               3.9      11.8       2.1       0.1       0.0       1.5
+13 H  s               0.2       6.3       0.0       0.0       0.3       2.1
+14 H  s               0.5       0.1       2.5       0.2       8.0       3.0
+15 H  s               2.3       0.3       4.5       3.1       0.1       0.5
+16 H  s               0.8       0.4       1.0       0.6      10.5       0.2
+
+                     54        55        56        57        58        59   
+                   0.43820   0.45443   0.47268   0.50028   0.51853   0.54936
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.3       1.2       0.2       0.0       0.7       0.6
+ 0 C  pz              0.2       0.3      13.6       0.6       0.0       0.0
+ 0 C  px              3.2       0.8       0.0       0.1       0.4       1.1
+ 0 C  py              0.7       0.6       0.1       3.2       2.1       2.1
+ 0 C  dz2             0.2       0.1       1.4       0.4       0.0       1.1
+ 0 C  dxz             0.0       0.0       0.4       0.1       0.0       0.0
+ 0 C  dyz             0.0       0.2       1.7       0.0       0.1       1.0
+ 0 C  dx2y2           0.0       0.4       0.3       0.1       0.0       0.0
+ 0 C  dxy             0.1       0.9       0.0       0.3       0.5       1.0
+ 1 C  s               0.2       4.3       0.4       0.0       0.7       2.8
+ 1 C  pz              1.2       0.5       2.0       0.1       0.2       0.6
+ 1 C  px              1.2       0.8       0.3       0.0       0.0       0.3
+ 1 C  py              1.1       2.8       0.2       2.1       2.5       0.8
+ 1 C  dz2             0.0       1.8       0.5       0.0       0.1       0.0
+ 1 C  dxz             0.0       0.0       0.4       0.1       0.0       0.0
+ 1 C  dx2y2           0.9       0.7       0.3       0.1       0.0       0.4
+ 1 C  dxy             0.2       1.0       0.0       0.5       1.2       0.3
+ 2 C  s               3.1       2.1       0.6       1.0       1.1       2.8
+ 2 C  pz              1.0       1.3       3.1      32.4       1.9       0.1
+ 2 C  px              3.3       3.7       0.4       0.4       0.3       4.2
+ 2 C  py              0.0       4.1       0.7       0.3       0.9       1.8
+ 2 C  dz2             0.8       0.0       0.2       0.4       0.9       0.0
+ 2 C  dxz             0.0       0.0       0.0       0.2       0.0       0.0
+ 2 C  dyz             0.0       0.0       0.2       0.1       0.0       0.0
+ 2 C  dx2y2           0.4       0.2       0.3       0.0       0.0       1.1
+ 2 C  dxy             0.4       0.5       0.0       0.0       0.3       0.8
+ 3 C  s               4.2       1.9       0.0       0.2       0.3       0.6
+ 3 C  pz              0.1       0.5       5.4      12.3       6.2       0.2
+ 3 C  px              2.0       0.6       0.0       0.0       0.6       5.8
+ 3 C  py              0.1       2.1       0.1       0.0       1.2       2.9
+ 3 C  dz2             2.1       1.3       0.0       0.1       0.3       0.0
+ 3 C  dxz             0.0       0.0       0.0       0.1       0.0       0.0
+ 3 C  dyz             0.0       0.0       0.1       0.1       0.0       0.0
+ 3 C  dx2y2           0.7       0.0       0.0       0.0       0.0       1.8
+ 3 C  dxy             0.1       1.2       0.0       0.0       0.1       0.2
+ 4 C  s               2.1       1.5       0.0       1.8       6.8       3.6
+ 4 C  pz              0.1       0.5       8.7       0.9       1.5       0.1
+ 4 C  px              1.1       1.9       0.1       0.5       1.8       0.5
+ 4 C  py              2.9       3.3       0.0       0.8       4.9       5.3
+ 4 C  dz2             1.7       0.2       0.0       0.0       0.2       0.4
+ 4 C  dxz             0.0       0.0       0.3       0.0       0.0       0.0
+ 4 C  dx2y2           1.1       0.6       0.1       0.1       0.0       0.0
+ 4 C  dxy             0.4       0.1       0.0       0.0       1.6       1.1
+ 5 N  s               2.2       0.8       0.1       0.1       0.8       0.1
+ 5 N  pz              0.0       0.1       1.9       0.4       0.6       0.0
+ 5 N  px              3.9       0.7       0.0       0.3       2.1       5.6
+ 5 N  py              0.0       4.0       0.3       0.9       5.6       0.8
+ 5 N  dz2             0.3       0.1       0.0       0.2       0.9       1.0
+ 5 N  dx2y2           0.3       0.0       0.0       0.1       0.0       0.7
+ 5 N  dxy             0.1       0.7       0.0       0.3       1.2       0.1
+ 6 C  s               4.3       2.1       0.7       0.7       4.0       0.9
+ 6 C  pz              2.3       2.0      26.5      27.3       3.0       0.1
+ 6 C  px              1.1       3.6       0.9       0.0       1.5       9.6
+ 6 C  py              0.6       5.7       0.7       0.0       0.4       0.5
+ 6 C  dz2             0.0       1.3       0.0       0.0       0.4       0.0
+ 6 C  dxz             0.0       0.0       0.0       0.1       0.0       0.0
+ 6 C  dyz             0.0       0.0       0.1       0.4       0.0       0.0
+ 6 C  dx2y2           0.4       0.0       0.1       0.1       0.0       1.3
+ 6 C  dxy             0.1       2.7       0.1       0.1       0.1       0.2
+ 7 C  s               4.5       0.1       0.1       0.0       0.1       4.2
+ 7 C  pz              0.6       0.5       8.2       1.1       0.6       0.0
+ 7 C  px             20.5       1.3       0.5       0.2       1.2       4.2
+ 7 C  py              2.2       0.0       0.1       1.2      18.6       3.2
+ 7 C  dz2             0.6       0.1       0.1       0.1       3.2       0.1
+ 7 C  dxz             0.0       0.0       0.1       0.1       0.1       0.0
+ 7 C  dyz             0.0       0.1       1.5       0.6       0.0       0.0
+ 7 C  dx2y2           0.5       0.4       0.0       0.0       0.9       0.1
+ 7 C  dxy             0.8       0.1       0.0       0.0       0.1       1.9
+ 8 H  s               0.5       0.2       5.7       1.0       0.0       1.3
+ 9 H  s               0.3       0.4       3.4       0.7       0.4       6.5
+10 H  s               0.5       4.0       0.4       0.0       0.5       2.9
+11 H  s               6.5       2.1       1.2       0.8       3.2       0.5
+12 H  s               1.1       8.9       0.1       0.7       2.0       0.4
+13 H  s               1.3      13.1       0.8       0.0       2.0       0.9
+14 H  s               0.2       0.1       2.5       0.3       3.9       2.8
+15 H  s               6.9       0.0       0.1       0.2       2.1       1.4
+16 H  s               0.0       1.0       1.7       2.0       0.4       3.2
+
+                     60        61        62        63        64        65   
+                   0.57404   0.58071   0.59679   0.60229   0.61353   0.62016
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.4       0.7       2.0       0.9       1.2      15.8
+ 0 C  pz              0.2       0.6       0.8       1.6       0.1       4.8
+ 0 C  px              0.3       0.4       4.6       0.1       2.5       5.0
+ 0 C  py             11.2       0.2       5.3       0.5       7.3       0.0
+ 0 C  dz2             0.7       0.5       0.6       0.2       0.2       0.1
+ 0 C  dxz             0.0       0.2       0.1       0.2       0.0       0.5
+ 0 C  dyz             0.3       0.0       1.3       1.3       0.5       0.2
+ 0 C  dx2y2           0.3       0.1       0.1       0.0       0.2       0.2
+ 0 C  dxy             0.6       0.5       0.0       0.0       0.2       0.0
+ 1 C  s               2.2       0.8       7.8       0.1       1.3       0.2
+ 1 C  pz              0.7       0.1       0.0       0.1       0.7      42.7
+ 1 C  px              0.2       0.3       3.4       0.5       7.2       0.2
+ 1 C  py              2.8       3.4       1.7       0.3       3.3       0.1
+ 1 C  dx2y2           0.0       0.0       0.0       0.1       0.3       0.0
+ 1 C  dxy             0.6       0.5       0.2       0.0       0.1       0.0
+ 2 C  s               0.5       0.2       0.3       0.1       0.6       1.7
+ 2 C  pz              1.6       7.8       1.5      15.3       2.0       1.5
+ 2 C  px              1.5       1.0       0.2       0.2       2.6       2.3
+ 2 C  py              1.5       0.1       3.4       0.0       5.3       1.8
+ 2 C  dz2             0.0       0.1       0.3       0.1       0.2       0.0
+ 2 C  dyz             0.0       0.0       0.0       0.3       0.0       0.2
+ 2 C  dx2y2           0.0       0.3       0.0       0.1       0.7       0.2
+ 2 C  dxy             0.0       0.0       0.2       0.0       0.1       0.0
+ 3 C  s               3.3       5.0       1.1       0.0       9.2       0.3
+ 3 C  pz             19.4       9.8       3.9       5.2       0.9       0.1
+ 3 C  px              3.6       6.1       0.6       0.1       0.9       1.0
+ 3 C  py              1.8       2.1       0.6       0.1       6.1       1.0
+ 3 C  dz2             0.0       0.2       0.1       0.0       0.2       0.0
+ 3 C  dyz             0.2       0.1       0.1       0.1       0.0       0.0
+ 3 C  dx2y2           0.3       0.1       0.1       0.0       0.3       0.0
+ 3 C  dxy             0.0       0.1       0.1       0.0       0.4       0.0
+ 4 C  s               0.2       4.7       2.2       0.3       0.2       0.3
+ 4 C  pz              9.6       1.3      13.6      36.8       0.5       1.0
+ 4 C  px              1.0       1.5       1.3       0.0       0.0       0.5
+ 4 C  py              4.3      12.9       0.0       0.5       0.9       0.1
+ 4 C  dz2             0.0       0.2       0.0       0.0       0.0       0.1
+ 4 C  dx2y2           0.7       1.1       0.1       0.0       0.0       0.1
+ 4 C  dxy             0.7       0.2       0.0       0.0       0.1       0.0
+ 5 N  s               1.3       0.3       1.0       0.2       0.0       0.1
+ 5 N  pz              1.1       0.5       0.8       0.6       0.1       2.2
+ 5 N  px              0.7       1.6       1.9       0.3       1.4       0.2
+ 5 N  py              1.0       4.2       0.1       0.1       0.1       0.2
+ 5 N  dz2             0.0       0.5       0.0       0.0       0.1       0.0
+ 5 N  dx2y2           0.7       1.5       0.2       0.1       0.4       0.0
+ 5 N  dxy             0.0       0.4       0.1       0.1       0.2       0.0
+ 6 C  s               0.4       0.2       0.7       0.1       5.9       1.4
+ 6 C  pz              0.5       0.6       5.7      10.3       0.4       2.4
+ 6 C  px              1.5       3.3       2.7       0.6       0.1       0.1
+ 6 C  py              0.3       0.5       0.1       0.3       1.6       0.4
+ 6 C  dz2             0.2       0.3       0.1       0.0       0.7       0.0
+ 6 C  dyz             0.0       0.0       0.2       0.2       0.0       0.3
+ 6 C  dx2y2           0.2       0.8       1.4       0.2       0.3       0.0
+ 6 C  dxy             0.1       0.0       0.0       0.0       0.1       0.0
+ 7 C  s               0.4       0.5       0.9       0.1       7.8       0.1
+ 7 C  pz              1.5       0.9       2.6       5.7       0.4       1.4
+ 7 C  px              0.3       0.1       2.7       0.2       2.7       0.1
+ 7 C  py              7.0       4.4       0.2       0.3       0.1       0.8
+ 7 C  dz2             1.4       1.5       0.0       0.0       0.0       0.0
+ 7 C  dxz             0.6       0.2       0.3       0.0       0.1       0.0
+ 7 C  dyz             0.8       0.0       0.0       2.6       0.0       0.0
+ 7 C  dx2y2           0.3       0.3       0.0       0.0       0.0       0.0
+ 7 C  dxy             0.2       0.2       0.1       0.0       0.1       0.1
+ 8 H  s               0.0       0.7       3.2       4.6       0.6       3.6
+ 9 H  s               1.3       0.6       0.1       2.1       1.9       1.4
+10 H  s               0.4       4.3       6.3       0.4       0.9       0.5
+11 H  s               0.1       1.2       4.1       0.8       3.8       1.3
+12 H  s               0.0       0.2       1.8       0.3       7.5       0.1
+13 H  s               0.3       4.1       1.0       0.5       5.3       0.1
+14 H  s               0.6       1.2       1.9       2.3       1.1       0.1
+15 H  s               0.0       0.4       1.7       0.1       0.1       0.5
+16 H  s               5.4       0.9       0.1       1.7       0.0       0.1
+
+                     66        67        68        69        70        71   
+                   0.62666   0.63958   0.65271   0.65963   0.66088   0.66392
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               8.2       2.0      14.4       0.2       0.3       5.3
+ 0 C  pz              2.6       0.3       1.6       2.0      31.4       5.7
+ 0 C  px              3.2       1.5       4.5       0.9       0.1       9.5
+ 0 C  py              4.6       1.3       1.9      19.9       1.7       1.0
+ 0 C  dz2             0.0       0.0       1.0       0.1       0.3       0.1
+ 0 C  dxz             0.2       0.0       0.0       0.0       0.7       0.2
+ 0 C  dyz             0.4       0.9       0.5       0.6       0.5       0.1
+ 0 C  dx2y2           0.0       0.1       0.2       0.0       0.0       0.3
+ 0 C  dxy             0.2       0.0       0.1       1.2       0.2       0.0
+ 1 C  s               0.1       0.1       2.0       0.0       0.0       2.6
+ 1 C  pz             18.4       5.6       1.9       0.2       3.0       0.2
+ 1 C  px              0.6       0.4       2.0       0.1       2.1       8.3
+ 1 C  py              0.4       2.7       2.3       3.4       1.2       0.7
+ 1 C  dz2             0.2       0.0       0.0       0.0       0.3       0.1
+ 1 C  dx2y2           0.1       0.0       0.1       0.0       0.1       0.0
+ 1 C  dxy             0.2       0.3       0.3       0.1       0.0       0.0
+ 2 C  s               1.2       8.8       4.0       0.2       0.3       0.1
+ 2 C  pz              0.0       0.0       1.3       0.8       0.9       0.1
+ 2 C  px              0.1       8.4       3.0       0.2       1.0       2.2
+ 2 C  py              2.0       3.7       0.2       0.9       0.6       0.1
+ 2 C  dz2             0.0       0.0       0.2       0.1       0.0       0.0
+ 2 C  dx2y2           0.1       0.2       0.0       0.1       0.0       0.2
+ 2 C  dxy             0.1       0.0       0.0       0.7       0.0       0.1
+ 3 C  s               0.2       0.6       1.6       0.2       0.1       1.1
+ 3 C  pz              0.8       0.2       0.1       0.0       0.1       0.0
+ 3 C  px              0.3       1.0       2.0       4.7       0.2       0.8
+ 3 C  py              1.6       1.2       3.6       0.2       0.1       0.1
+ 3 C  dz2             0.0       0.1       0.0       0.0       0.0       0.1
+ 3 C  dx2y2           0.0       0.0       0.1       0.1       0.0       0.2
+ 3 C  dxy             0.1       0.1       0.1       0.0       0.1       0.1
+ 4 C  s               3.4       0.0       0.7       1.7       0.3       6.7
+ 4 C  pz              0.2       0.0       0.0       0.3       0.7       0.0
+ 4 C  px              4.7       0.1       1.7       0.8       0.4       8.3
+ 4 C  py              0.1       2.1       2.9       0.5       1.4       0.2
+ 4 C  dz2             0.1       0.0       0.2       0.0       0.0       0.1
+ 4 C  dx2y2           0.0       0.0       0.1       0.3       0.1       0.0
+ 4 C  dxy             0.0       0.1       0.1       0.0       0.0       0.0
+ 5 N  s               0.1       0.1       1.0       0.3       0.4       0.0
+ 5 N  pz              1.0       0.5       0.1       0.0       0.2       0.0
+ 5 N  px              1.1       0.0       0.2       0.2       0.0       0.3
+ 5 N  py              0.2       0.9       1.9       0.8       0.8       0.3
+ 5 N  dz2             0.1       0.0       0.6       0.0       0.2       0.0
+ 5 N  dx2y2           0.3       0.0       0.0       0.4       0.1       0.0
+ 6 C  s               5.3       7.0       0.2       0.4       0.1       1.1
+ 6 C  pz              3.8       0.6       0.0       0.3       0.1       0.2
+ 6 C  px              1.1       2.5       3.4       0.1       0.1       0.1
+ 6 C  py              8.5       5.3       1.1       4.0       4.5       0.7
+ 6 C  dz2             0.1       0.0       0.1       0.0       0.0       0.0
+ 6 C  dyz             0.3       0.1       0.0       0.0       0.0       0.0
+ 6 C  dxy             0.1       0.1       0.2       0.5       0.3       0.2
+ 7 C  s               3.2      13.3       0.6       1.1       4.2      13.2
+ 7 C  pz              0.0       0.1       3.3       4.4       5.8       0.6
+ 7 C  px              0.7       4.6       0.0       0.1       2.5      17.0
+ 7 C  py              2.4       0.1       7.2       9.0       0.1       0.1
+ 7 C  dz2             0.0       0.0       0.4       0.5       0.0       0.0
+ 7 C  dxz             0.0       0.0       0.1       0.2       0.1       0.0
+ 7 C  dyz             0.0       0.0       0.0       0.4       0.2       0.0
+ 7 C  dx2y2           0.0       0.1       0.0       0.0       0.1       0.3
+ 7 C  dxy             0.1       0.0       0.4       0.3       0.1       0.1
+ 8 H  s               1.4       0.6       6.7       0.0      12.5       3.0
+ 9 H  s               3.8       0.2       3.7      10.2       5.0       0.5
+10 H  s               1.2       2.1       0.3       9.9       3.5       2.9
+11 H  s               0.3       5.7       1.5       0.6       0.1       0.3
+12 H  s               0.5       0.2       2.0       0.0       0.1       0.5
+13 H  s               3.5       6.5       0.1       2.3       0.9       1.0
+14 H  s               1.0       2.0       1.5       0.1       7.0       0.3
+15 H  s               3.9       3.9       8.3       1.8       2.8       1.9
+16 H  s               1.4       1.5       0.3      11.6       0.2       0.9
+
+                     72        73        74        75        76        77   
+                   0.67722   0.68495   0.69992   0.70815   0.73037   0.75418
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               2.4       0.2       0.1       1.8       0.9       1.7
+ 0 C  pz              0.6       8.3       0.8       1.0       3.6       0.6
+ 0 C  px              2.5       0.0       3.7       1.0       1.3       0.7
+ 0 C  py              4.1       3.1       0.4       0.2       6.6       1.3
+ 0 C  dz2             0.4       0.0       0.0       0.0       0.0       0.6
+ 0 C  dyz             0.2       0.1       0.0       0.0       0.0       0.8
+ 0 C  dx2y2           0.0       0.0       0.6       0.2       0.0       0.0
+ 0 C  dxy             0.0       0.1       0.1       0.0       0.0       0.3
+ 1 C  s               2.5       0.0       2.7       0.4      11.1      10.7
+ 1 C  pz              1.1       2.2       0.3       1.0       1.0       0.0
+ 1 C  px              2.1       0.4       4.8       2.0       4.8       1.4
+ 1 C  py              2.1       0.4       1.0       0.0       0.0       1.8
+ 1 C  dz2             0.2       0.0       0.4       0.4       0.0       0.1
+ 1 C  dxz             0.0       0.0       0.0       0.0       0.1       0.0
+ 1 C  dx2y2           0.0       0.0       0.1       0.0       0.5       0.0
+ 1 C  dxy             0.6       0.0       0.2       0.0       0.0       0.6
+ 2 C  s               4.1       0.2       0.9       1.8       0.9      18.3
+ 2 C  pz              0.6       5.2       0.0       0.3       0.0       0.0
+ 2 C  px              0.7       0.0      10.8       4.1       4.6       3.0
+ 2 C  py              1.0       0.1       3.8       8.2       7.5       0.7
+ 2 C  dz2             0.0       0.0       0.4       0.0       0.0       0.0
+ 2 C  dx2y2           0.1       0.0       0.3       0.1       0.2       0.3
+ 2 C  dxy             0.0       0.0       0.3       0.0       0.2       0.4
+ 3 C  s               6.6       1.1       0.8       0.9       7.1       3.3
+ 3 C  pz              0.6       7.5       0.1       0.1       0.0       0.0
+ 3 C  px              3.3       0.3      10.4       0.1       0.8      12.7
+ 3 C  py              3.4       0.9      12.3       6.2       2.2       5.5
+ 3 C  dz2             0.1       0.0       0.2       0.1       0.1       0.0
+ 3 C  dyz             0.0       0.1       0.0       0.0       0.0       0.0
+ 3 C  dx2y2           0.4       0.1       0.4       0.0       0.1       0.3
+ 3 C  dxy             0.2       0.0       0.6       0.0       0.0       0.3
+ 4 C  s               0.1       0.1       0.6       0.8       0.1       2.9
+ 4 C  pz              0.2       3.4       0.0       0.0       0.3       0.0
+ 4 C  px              1.5       0.2       3.7       4.4       1.5       2.5
+ 4 C  py              3.5       0.6       0.5       0.8       0.1       4.8
+ 4 C  dz2             0.0       0.0       0.2       0.0       0.0       0.1
+ 4 C  dx2y2           0.0       0.0       0.0       0.1       0.1       0.1
+ 4 C  dxy             0.3       0.0       0.1       0.2       0.1       0.0
+ 5 N  s               0.6       0.0       0.1       1.8       1.5       0.4
+ 5 N  pz              0.3       0.2       0.1       0.1       0.3       0.1
+ 5 N  px              2.5       0.3       3.2       1.3       0.6       1.1
+ 5 N  py              0.2       0.5       2.8       2.0       4.4       1.3
+ 5 N  dz2             0.1       0.0       0.2       0.0       0.2       0.1
+ 5 N  dx2y2           0.5       0.1       0.0       0.0       0.1       0.4
+ 5 N  dxy             0.0       0.0       0.0       0.1       0.4       0.0
+ 6 C  s               0.1       0.1       0.7       4.5       5.9       3.6
+ 6 C  px              4.9       0.6       3.7       4.4       2.9       5.6
+ 6 C  py              0.7       0.2       0.4      12.1       3.0       1.3
+ 6 C  dz2             0.1       0.0       0.4       0.0       0.2       0.0
+ 6 C  dx2y2           0.1       0.0       0.2       0.0       0.0       0.0
+ 6 C  dxy             0.2       0.1       0.0       0.1       0.4       0.1
+ 7 C  s               3.9       0.3       0.0       1.9       6.2       0.5
+ 7 C  pz              3.9      35.6       0.0       0.1       0.1       0.1
+ 7 C  px              1.2       0.1       4.0       0.1       0.3       0.5
+ 7 C  py              8.3       0.4       4.3       4.2       5.6       0.6
+ 7 C  dz2             0.5       0.0       0.0       0.3       0.0       0.0
+ 7 C  dxz             0.1       0.4       0.0       0.0       0.0       0.0
+ 7 C  dyz             0.0       0.4       0.0       0.1       0.0       0.0
+ 7 C  dx2y2           0.1       0.0       0.5       0.1       0.1       0.1
+ 7 C  dxy             0.0       0.0       0.4       0.0       0.0       0.0
+ 8 H  s               0.7       2.6       0.0       1.2       0.1       2.3
+ 9 H  s               0.8       2.1       0.0       5.5       0.0       4.1
+10 H  s               3.6       1.4       1.5       6.7       1.0       0.0
+11 H  s               0.6       0.0       1.9       1.7       2.1       0.2
+12 H  s               2.9       0.6       6.0       1.1       2.0       0.6
+13 H  s               0.5       0.1       0.2       2.7       0.4       0.0
+14 H  s              12.4       6.8       0.1       0.9       2.3       0.0
+15 H  s               0.4       0.5       7.4       9.8       0.8       0.4
+16 H  s               4.0      11.6       0.1       0.5       3.0       0.0
+
+                     78        79        80        81        82        83   
+                   0.78200   0.81504   0.82893   0.87945   0.88927   0.96167
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.3       1.5      12.7       4.7       2.5      10.3
+ 0 C  pz              0.0       0.2       0.2       0.4       0.1       0.1
+ 0 C  px              0.0       0.1       1.7       1.0       0.3       1.2
+ 0 C  py              0.7       3.0       0.3       0.7       0.0       0.1
+ 0 C  dxz             0.0       0.0       0.0       0.0       0.3       0.1
+ 0 C  dyz             0.0       0.0       0.2       0.0       0.0       0.1
+ 0 C  dx2y2           0.1       0.0       0.3       0.0       0.0       0.0
+ 0 C  dxy             0.5       0.9       0.8       0.4       0.1       0.0
+ 1 C  s               0.1       2.4       5.2       0.5       0.0       0.3
+ 1 C  pz              0.0       0.1       0.1       0.7       1.5       0.0
+ 1 C  px              0.1       1.1       0.6       0.9       0.8       0.6
+ 1 C  py             13.1      10.7       4.1       8.1       1.8       0.2
+ 1 C  dz2             0.0       0.0       0.4       0.1       0.1       0.4
+ 1 C  dyz             0.0       0.0       0.0       0.1       0.1       0.0
+ 1 C  dx2y2           0.0       0.4       0.1       0.4       0.1       0.0
+ 2 C  s               0.4       2.6       3.8       1.6       0.4       0.1
+ 2 C  pz              0.0       0.0       0.0       0.1       0.6       0.0
+ 2 C  px              1.5       0.3       1.0       7.1       1.3       3.4
+ 2 C  py             11.9       0.1       2.9       6.9       1.6       1.1
+ 2 C  dz2             0.0       0.1       0.1       0.1       0.0       0.0
+ 2 C  dx2y2           0.1       0.0       0.2       0.0       0.0       0.4
+ 2 C  dxy             0.1       0.4       0.0       0.1       0.0       0.0
+ 3 C  s               8.7       0.1       6.2       0.9       0.2       0.3
+ 3 C  pz              0.0       0.0       0.0       0.1       0.6       0.0
+ 3 C  px              0.4       2.4       0.5      12.2       2.4       0.7
+ 3 C  py              3.2       1.3       2.1       1.1       0.2       4.0
+ 3 C  dz2             0.1       0.0       0.0       0.0       0.0       0.0
+ 3 C  dyz             0.0       0.0       0.0       0.2       0.5       0.0
+ 3 C  dx2y2           0.0       0.1       0.0       0.2       0.1       0.6
+ 3 C  dxy             0.4       0.0       0.4       0.0       0.0       0.2
+ 4 C  s               6.8       4.9       3.1       1.3       0.1       4.5
+ 4 C  pz              0.0       0.0       0.0       1.5       3.7       0.0
+ 4 C  px              0.1       1.4       8.9       1.1       1.2       2.2
+ 4 C  py             15.3       0.9       4.4       5.2       1.0       4.2
+ 4 C  dz2             0.3       1.3       0.0       0.0       0.0       0.1
+ 4 C  dyz             0.0       0.0       0.0       0.1       0.4       0.0
+ 4 C  dx2y2           0.2       0.4       0.1       0.4       0.1       0.0
+ 4 C  dxy             0.0       0.0       0.3       0.0       0.0       0.2
+ 5 N  s               3.1       5.2       6.0       1.5       0.8       6.2
+ 5 N  pz              0.0       0.0       1.3      17.3      65.0       0.1
+ 5 N  px              3.7       7.0       5.2       0.2       0.2       2.6
+ 5 N  py             14.0       1.4       3.2       0.1       0.1      18.5
+ 5 N  dz2             0.1       0.1       0.0       0.2       0.1       0.4
+ 5 N  dxz             0.0       0.0       0.0       0.1       0.2       0.0
+ 5 N  dyz             0.0       0.0       0.0       0.2       0.6       0.0
+ 5 N  dx2y2           0.0       0.3       0.2       0.0       0.0       0.3
+ 5 N  dxy             0.6       0.5       0.1       0.0       0.0       0.1
+ 6 C  s               2.6       3.8       1.8       0.3       0.1       0.1
+ 6 C  pz              0.0       0.0       0.0       0.3       2.0       0.0
+ 6 C  px              0.2       0.1       0.7       1.1       0.2       5.3
+ 6 C  py              1.2      16.9       0.8       0.4       0.1       6.6
+ 6 C  dz2             0.1       0.0       0.2       0.0       0.0       0.0
+ 6 C  dxz             0.0       0.0       0.0       0.2       0.6       0.0
+ 6 C  dx2y2           0.0       0.0       0.3       0.4       0.2       0.0
+ 6 C  dxy             0.7       0.2       0.1       0.2       0.1       0.4
+ 7 C  s               0.2      12.9       0.0       6.7       2.4       7.3
+ 7 C  pz              0.2       0.1       0.0       0.4       0.1       0.0
+ 7 C  px              0.3       1.9       0.0       1.5       0.5       2.2
+ 7 C  py              1.0       2.8       2.2       0.7       0.1       1.1
+ 7 C  dz2             0.9       0.1       0.3       0.0       0.0       0.0
+ 7 C  dxz             0.0       0.0       0.0       0.0       0.4       0.0
+ 7 C  dyz             0.1       0.0       0.0       0.0       0.0       0.0
+ 7 C  dx2y2           0.8       0.6       0.0       0.1       0.0       0.0
+ 7 C  dxy             1.0       0.0       1.0       0.1       0.0       0.9
+ 8 H  s               0.1       0.1       2.4       1.7       0.7       1.7
+ 9 H  s               0.0       0.2       2.3       1.6       0.6       1.8
+10 H  s               0.1       0.1       5.3       0.4       0.4       0.8
+11 H  s               0.9       1.1       1.0       0.0       0.0       0.2
+12 H  s               0.1       1.8       0.4       0.3       0.1       0.1
+13 H  s               0.3       0.5       2.2       0.3       0.0       1.9
+14 H  s               0.7       1.3       0.1       2.4       1.1       1.5
+15 H  s               0.2       3.0       1.7       0.3       0.3       2.1
+16 H  s               1.5       1.0       0.0       2.7       0.7       1.7
+
+                     84        85        86        87        88        89   
+                   1.02000   1.12889   1.19012   1.20390   1.21405   1.28894
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.6       2.5       3.7       0.1       6.9       0.1
+ 0 C  pz              0.0       0.1       0.0       0.0       0.0       1.0
+ 0 C  px              0.3       0.1       0.9       0.0       0.1       0.0
+ 0 C  py              4.2       0.2       0.1       0.1       0.1       0.0
+ 0 C  dz2             0.0       0.0       0.1       0.1       0.1       1.9
+ 0 C  dxz             0.0       0.1       0.2       0.4       0.0      15.2
+ 0 C  dyz             0.0       0.0       0.1       0.2       0.0       1.6
+ 0 C  dx2y2           0.1       0.2       0.1       0.0       0.2       1.1
+ 0 C  dxy             3.6       0.0       0.1       0.0       0.1       0.0
+ 1 C  s               0.2       1.2       2.9       0.0       0.1       0.1
+ 1 C  px              0.3      16.2       1.4       0.2      26.1       0.0
+ 1 C  py             10.3       1.4       0.3       0.0       1.3       0.0
+ 1 C  dz2             0.0       0.4       0.0       0.0       0.0       0.0
+ 1 C  dxz             0.0       0.1       0.2       0.2       0.1      25.5
+ 1 C  dyz             0.0       0.0       0.0      19.3       0.1       0.8
+ 1 C  dx2y2           0.0       2.4       0.0       0.0       1.1       0.0
+ 1 C  dxy             1.7       0.0       0.0       0.0       0.1       0.0
+ 2 C  s               2.1       0.6       0.6       0.0       0.4       0.0
+ 2 C  px              7.5       1.4       1.8       0.0       5.6       0.1
+ 2 C  py              0.3       9.4       2.7       0.0      10.5       0.0
+ 2 C  dz2             0.4       0.3       0.2       0.0       0.0       0.0
+ 2 C  dxz             0.0       0.0       0.0      14.8       0.2       2.7
+ 2 C  dyz             0.0       0.1       0.0       6.8       0.0       6.6
+ 2 C  dx2y2           0.3       0.0       0.3       0.0       0.3       0.0
+ 2 C  dxy             0.3       1.7       0.4       0.0       0.6       0.0
+ 3 C  s               1.3       1.1       0.6       0.0       0.7       0.1
+ 3 C  px              2.9       2.0       4.0       0.0       1.2       0.0
+ 3 C  py             10.3      12.4       0.2       0.0       2.9       0.0
+ 3 C  dz2             0.3       0.1       0.0       0.0       0.3       0.0
+ 3 C  dxz             0.0       0.0       0.0      14.2       0.1       1.9
+ 3 C  dyz             0.0       0.0       0.0       6.3       0.0       5.1
+ 3 C  dx2y2           0.6       0.0       0.2       0.0       0.0       0.0
+ 3 C  dxy             0.9       0.8       0.0       0.0       0.0       0.0
+ 4 C  s               0.5       2.1       0.3       0.0       0.5       0.0
+ 4 C  pz              0.0       0.0       0.0       0.1       0.0       0.1
+ 4 C  px              0.4       9.2      17.2       0.1       0.9       0.0
+ 4 C  py              1.2       1.8       5.0       0.0       0.0       0.0
+ 4 C  dz2             0.2       0.1       0.0       0.0       0.1       0.0
+ 4 C  dxz             0.0       0.0       0.0       1.6       0.0       9.8
+ 4 C  dyz             0.0       0.0       0.0      15.0       0.1       0.0
+ 4 C  dx2y2           0.0       0.7       1.3       0.0       0.3       0.0
+ 4 C  dxy             0.9       0.1       0.0       0.0       0.0       0.0
+ 5 N  s               1.2       8.4       0.1       0.0      15.0       0.7
+ 5 N  px              0.5       5.3      20.8       0.0       0.8       0.1
+ 5 N  py             12.4       0.1       0.5       0.1       6.1       0.0
+ 5 N  dz2             1.1       1.6       0.1       0.0       3.8       0.1
+ 5 N  dxz             0.0       0.0       0.0       4.2       0.0       0.3
+ 5 N  dyz             0.0       0.0       0.0       1.1       0.0       1.3
+ 5 N  dx2y2           0.0       0.9       3.0       0.0       0.3       0.0
+ 5 N  dxy             0.1       1.2       0.3       0.0       0.0       0.0
+ 6 C  s               2.2       1.3       2.6       0.0       0.7       0.0
+ 6 C  pz              0.0       0.0       0.0       0.0       0.0       0.1
+ 6 C  px             13.7       2.9       5.6       0.0       0.5       0.2
+ 6 C  py              7.2       0.3       1.5       0.0       1.9       0.0
+ 6 C  dz2             0.0       0.8       0.0       0.0       0.2       0.0
+ 6 C  dxz             0.0       0.0       0.0       9.1       0.0       0.7
+ 6 C  dyz             0.0       0.0       0.0       3.3       0.0      11.9
+ 6 C  dx2y2           0.5       0.1       0.3       0.0       0.1       0.0
+ 6 C  dxy             1.4       0.0       0.9       0.0       0.1       0.0
+ 7 C  s               0.2       3.6       9.5       0.0       1.0       0.0
+ 7 C  pz              0.0       0.0       0.0       0.1       0.0       0.4
+ 7 C  py              0.3       0.1       1.6       0.0       0.3       0.0
+ 7 C  dz2             0.0       0.0       0.1       0.0       0.1       0.1
+ 7 C  dxz             0.0       0.0       0.0       1.3       0.0       6.7
+ 7 C  dyz             0.0       0.0       0.0       0.7       0.0       2.0
+ 7 C  dx2y2           0.0       0.0       0.5       0.0       0.1       0.1
+ 7 C  dxy             0.0       0.0       1.7       0.0       1.1       0.0
+ 8 H  s               0.2       0.0       0.6       0.0       0.0       0.5
+ 9 H  s               0.0       0.0       0.5       0.1       0.1       0.1
+10 H  s               0.6       0.0       0.4       0.0       0.3       0.0
+11 H  s               0.5       1.2       0.9       0.0       4.9       0.0
+12 H  s               2.8       2.2       0.8       0.0       0.6       0.0
+13 H  s               2.9       0.9       1.4       0.0       0.1       0.0
+14 H  s               0.0       0.0       0.4       0.1       0.1       0.1
+15 H  s               0.2       0.1       0.4       0.0       0.1       0.0
+16 H  s               0.0       0.1       0.4       0.0       0.1       0.1
+
+                     90        91        92        93        94        95   
+                   1.29462   1.31925   1.33064   1.40519   1.45766   1.55193
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.7       0.8       0.2       0.0       0.0       0.0
+ 0 C  pz              0.0       0.1       0.2       0.1       0.1       0.0
+ 0 C  px              0.4       0.2       0.0       0.0       0.0       0.0
+ 0 C  dz2             0.1       0.0       1.0       0.0       0.0       0.0
+ 0 C  dxz             0.1       1.4       7.9       1.4       0.1       0.5
+ 0 C  dyz             0.0       0.3       0.8       0.0       0.1       0.0
+ 0 C  dx2y2           0.2       0.1       0.3       0.0       0.0       0.0
+ 1 C  s               4.2       0.3       0.6       0.0       0.0       0.0
+ 1 C  pz              0.0       0.0       0.2       0.1       0.0       0.1
+ 1 C  px              2.7       6.7       1.6       0.0       0.0       0.0
+ 1 C  py              0.2       0.2       0.0       0.0       0.0       0.0
+ 1 C  dz2             0.7       0.0       0.0       0.0       0.0       0.0
+ 1 C  dxz             0.0       2.1      10.9       1.1       0.2       0.1
+ 1 C  dyz             0.1       0.5       3.2       8.8      10.7       0.6
+ 1 C  dx2y2           0.2       0.0       0.0       0.0       0.0       0.0
+ 1 C  dxy             0.1       0.2       0.1       0.0       0.0       0.0
+ 2 C  s               2.6       0.2       0.0       0.0       0.0       0.0
+ 2 C  pz              0.0       0.0       0.2       1.0       0.1       0.2
+ 2 C  px              3.0       0.8       0.2       0.0       0.0       0.0
+ 2 C  py              7.5       1.5       0.1       0.0       0.0       0.0
+ 2 C  dz2             0.2       0.1       0.0       0.0       0.0       0.0
+ 2 C  dxz             0.1       0.1       0.7      21.0       5.3       0.5
+ 2 C  dyz             0.0       0.8       4.8      15.7       3.2       3.6
+ 2 C  dx2y2           0.0       0.3       0.1       0.0       0.0       0.0
+ 2 C  dxy             0.4       0.0       0.0       0.0       0.0       0.0
+ 3 C  s               2.2       1.4       0.0       0.0       0.0       0.0
+ 3 C  pz              0.0       0.1       0.4       0.3       0.5       0.3
+ 3 C  px              1.9       2.4       0.2       0.0       0.0       0.0
+ 3 C  py              5.3       5.1       0.1       0.0       0.0       0.0
+ 3 C  dz2             0.0       0.1       0.0       0.0       0.0       0.0
+ 3 C  dxz             0.1       0.1       0.5      27.7       0.2       0.0
+ 3 C  dyz             0.6       1.1      10.4       3.0       6.7      10.4
+ 3 C  dx2y2           0.5       0.0       0.0       0.0       0.0       0.0
+ 3 C  dxy             2.1       0.4       0.0       0.0       0.0       0.0
+ 4 C  s               2.2       1.0       0.1       0.0       0.0       0.0
+ 4 C  pz              0.0       0.0       0.2       0.1       0.2       0.4
+ 4 C  px              2.7      13.9       0.8       0.0       0.0       0.0
+ 4 C  py              1.0       0.4       0.2       0.0       0.0       0.0
+ 4 C  dz2             0.7       0.1       0.1       0.0       0.0       0.0
+ 4 C  dxz             1.2       2.7      20.8       0.1       6.2       1.9
+ 4 C  dyz             0.0       0.1       1.9       0.7      25.4       6.5
+ 4 C  dx2y2           0.5       0.2       0.1       0.0       0.0       0.0
+ 4 C  dxy             0.5       0.4       0.2       0.0       0.0       0.0
+ 5 N  s              27.1       1.2       0.1       0.0       0.0       0.0
+ 5 N  pz              0.0       0.0       0.0       0.6       0.5       2.2
+ 5 N  px              1.0      16.5       4.3       0.0       0.0       0.0
+ 5 N  py              5.2       4.1       1.5       0.0       0.0       0.0
+ 5 N  dz2             6.3       0.7       0.0       0.0       0.0       0.0
+ 5 N  dxz             0.0       0.0       0.0       1.9       7.8      11.0
+ 5 N  dyz             0.0       0.1       0.4       0.0       5.9      11.9
+ 5 N  dx2y2           0.4       2.9       0.9       0.0       0.0       0.0
+ 5 N  dxy             1.1       1.1       0.5       0.0       0.0       0.0
+ 6 C  s               1.5       1.1       0.2       0.0       0.0       0.0
+ 6 C  pz              0.0       0.0       0.1       0.1       0.7       0.6
+ 6 C  px              0.1       0.6       0.0       0.0       0.0       0.0
+ 6 C  py              2.3      11.6       2.2       0.0       0.0       0.0
+ 6 C  dz2             1.0       0.6       0.0       0.0       0.0       0.0
+ 6 C  dxz             0.0       0.1       0.3       7.5       7.4      34.7
+ 6 C  dyz             0.0       0.1       0.4       7.7      12.4      12.7
+ 6 C  dx2y2           0.0       1.5       0.1       0.0       0.0       0.0
+ 7 C  s               1.7       1.2       0.3       0.0       0.0       0.0
+ 7 C  pz              0.0       0.0       0.4       0.1       0.2       0.0
+ 7 C  px              0.1       0.8       0.1       0.0       0.0       0.0
+ 7 C  py              0.3       0.7       0.2       0.0       0.0       0.0
+ 7 C  dz2             0.0       0.2       0.1       0.0       0.0       0.1
+ 7 C  dxz             0.8       2.0      14.0       0.8       5.6       1.4
+ 7 C  dyz             0.2       0.5       3.2       0.0       0.1       0.2
+ 7 C  dx2y2           0.2       0.0       0.1       0.0       0.0       0.0
+ 7 C  dxy             0.1       0.2       0.0       0.0       0.0       0.0
+ 8 H  s               0.1       0.1       0.1       0.0       0.0       0.0
+11 H  s               2.5       0.0       0.1       0.0       0.0       0.0
+12 H  s               1.6       2.3       0.1       0.0       0.0       0.0
+13 H  s               0.9       3.0       0.5       0.0       0.0       0.0
+14 H  s               0.1       0.1       0.5       0.0       0.2       0.0
+15 H  s               0.1       0.1       0.0       0.0       0.0       0.0
+16 H  s               0.2       0.3       0.0       0.0       0.1       0.0
+
+                     96        97        98        99       100       101   
+                   1.69639   1.70443   1.71819   1.73744   1.79162   1.79618
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.6       2.6       0.1       0.4       0.0       0.1
+ 0 C  pz              0.0       0.0       0.1       0.1       0.8       0.5
+ 0 C  px              0.3       2.0       0.1       0.0       0.0       0.0
+ 0 C  py              0.1       0.0       0.1       0.0       0.7       0.8
+ 0 C  dz2             4.0       3.7       0.7       0.2       0.0       8.5
+ 0 C  dxz             0.0       0.1       0.2       0.2      17.1      10.3
+ 0 C  dyz             0.7       0.0       0.0       0.2      15.5       2.4
+ 0 C  dx2y2           1.0      12.2       0.5       0.0       0.4       9.6
+ 0 C  dxy             4.9       0.1       0.1       1.0      13.0      18.0
+ 1 C  s               1.5       1.4       2.0       0.3       0.0       0.1
+ 1 C  pz              0.0       0.0       0.1       0.1       2.8       1.9
+ 1 C  px              0.3       3.1       1.7       0.3       0.0       0.0
+ 1 C  py              4.8       0.4       0.1       1.9       2.5       4.6
+ 1 C  dz2             5.3       6.6       8.3       2.0       0.0       0.3
+ 1 C  dxz             0.0       0.0       0.1       0.1       0.5       0.3
+ 1 C  dx2y2           2.8      19.6       3.1       1.4       0.1       0.3
+ 1 C  dxy             3.6       1.3       0.1       2.5       0.0       0.2
+ 2 C  s               0.6       0.3       1.5       0.4       0.7       1.1
+ 2 C  pz              0.0       0.0       0.0       0.0       0.3       0.1
+ 2 C  px              0.3       0.3       0.4       0.2       0.1       0.0
+ 2 C  py              0.6       0.1       0.4       0.5       0.1       0.1
+ 2 C  dz2             4.4       1.0       6.2       3.9       0.1       2.3
+ 2 C  dxz             0.0       0.0       0.0       0.0       1.3       0.7
+ 2 C  dyz             0.0       0.0       0.2       0.2      11.3       4.9
+ 2 C  dx2y2           0.1       3.7       1.4       1.7       1.9       2.0
+ 2 C  dxy             8.0       1.9       4.0       1.8       0.0       0.3
+ 3 C  s               1.1       0.3       2.2       0.7       0.0       0.5
+ 3 C  px              0.5       1.3       0.5       0.1       0.4       0.6
+ 3 C  py              0.2       0.0       1.5       0.4       0.1       0.2
+ 3 C  dz2             3.3       0.5       4.9      11.0       0.4       0.4
+ 3 C  dxz             0.0       0.0       0.0       0.0       0.9       0.5
+ 3 C  dyz             0.0       0.0       0.0       0.0       2.1       1.8
+ 3 C  dx2y2           0.0       0.2       1.9       4.3       1.8       1.4
+ 3 C  dxy             7.0       1.1       7.1       0.0       0.2       0.0
+ 4 C  s               0.2       0.3       0.3       3.5       0.1       0.0
+ 4 C  pz              0.0       0.0       0.0       0.0       0.7       0.5
+ 4 C  px              0.5       0.1       0.9       3.1       0.0       0.0
+ 4 C  py              3.2       1.2       0.4       1.3       0.6       0.7
+ 4 C  dz2             2.8       3.2       0.5      15.8       0.0       1.0
+ 4 C  dxz             0.0       0.0       0.0       0.0       0.1       0.0
+ 4 C  dyz             0.0       0.0       0.0       0.0       1.1       0.4
+ 4 C  dx2y2           0.5       1.8      16.1       6.3       0.0       0.2
+ 4 C  dxy             3.9       1.8       0.4       4.0       2.1       1.4
+ 5 N  s               0.5       0.5       3.4       0.1       0.1       0.1
+ 5 N  px              1.3       0.1       0.0       1.9       0.6       0.5
+ 5 N  py              0.3       0.3       0.1       0.3       0.3       0.4
+ 5 N  dz2             0.3       0.1       0.1       1.0       0.2       0.5
+ 5 N  dxz             0.0       0.0       0.0       0.0       0.4       0.5
+ 5 N  dyz             0.0       0.0       0.0       0.0       1.5       0.9
+ 5 N  dx2y2           0.0       0.0       1.5       0.0       0.7       0.3
+ 5 N  dxy             1.7       0.4       4.5       1.5       0.0       0.1
+ 6 C  s               0.2       0.5       1.2       0.2       0.7       1.0
+ 6 C  pz              0.0       0.0       0.0       0.0       0.2       0.2
+ 6 C  px              0.1       0.4       0.0       0.0       0.1       0.4
+ 6 C  py              0.1       0.1       0.5       0.1       0.1       0.2
+ 6 C  dz2             2.9       1.7       5.1       0.8       0.0       0.1
+ 6 C  dxz             0.0       0.0       0.0       0.0       0.3       0.5
+ 6 C  dyz             0.1       0.0       0.2       0.2       6.4       6.9
+ 6 C  dx2y2           1.2       1.2       0.5       1.2       2.1       1.4
+ 6 C  dxy             2.1       7.6       2.4       0.5       0.1       0.1
+ 7 C  s               0.3       0.2       0.7       2.8       0.0       0.0
+ 7 C  pz              0.0       0.0       0.0       0.0       0.2       0.1
+ 7 C  px              0.1       0.3       0.8       1.3       0.0       0.0
+ 7 C  py              0.4       0.2       0.1       0.1       0.0       0.1
+ 7 C  dz2             5.2       3.3       0.7       2.4       0.1       0.4
+ 7 C  dxz             0.0       0.0       0.0       0.1       2.7       2.2
+ 7 C  dyz             0.3       0.2       0.0       0.1       1.1       1.2
+ 7 C  dx2y2           0.1       0.0       7.2      10.7       0.1       0.2
+ 7 C  dxy            11.6       6.9       0.8       2.5       0.9       1.4
+ 8 H  s               0.2       0.4       0.1       0.1       0.0       0.0
+ 9 H  s               0.1       0.4       0.0       0.0       0.1       0.0
+10 H  s               0.1       0.4       0.0       0.0       0.1       0.2
+11 H  s               2.2       0.9       0.2       0.0       0.0       0.0
+12 H  s               1.3       0.1       1.1       0.8       0.1       0.2
+13 H  s               0.1       1.7       0.1       0.0       0.2       0.4
+14 H  s               0.1       0.0       0.0       0.5       0.0       0.0
+15 H  s               0.0       0.0       0.5       0.1       0.0       0.0
+16 H  s               0.0       0.0       0.0       0.5       0.1       0.0
+
+                    102       103       104       105       106       107   
+                   1.81365   1.85392   1.86009   1.92709   1.96472   2.00691
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.1       0.0       0.0       0.0       0.2       0.1
+ 0 C  pz              0.0       0.0       0.5       0.0       0.3       1.6
+ 0 C  px              0.1       0.0       0.0       0.0       0.2       0.1
+ 0 C  py              0.0       0.3       0.0       0.8       0.0       0.2
+ 0 C  dz2             0.7       1.3       2.0       4.3       3.8       1.4
+ 0 C  dxz             0.2       0.0       5.0       0.6       1.9       3.1
+ 0 C  dyz             0.0       0.5       1.7       5.5       4.2      23.6
+ 0 C  dx2y2           0.9       0.0       1.1       2.8       0.6       6.8
+ 0 C  dxy             0.2       3.2       0.1       0.3       1.1       0.8
+ 1 C  s               0.7       0.4       0.0       0.5       2.3       0.5
+ 1 C  pz              0.0       0.0       0.5       0.0       0.1       0.2
+ 1 C  px              0.1       0.1       0.0       0.6       0.5       0.2
+ 1 C  py              1.9       1.5       0.0       1.5       0.5       0.0
+ 1 C  dz2             0.3       0.9       0.1       2.8      12.3       0.1
+ 1 C  dxz             0.0       0.0       2.1       0.0       0.7       3.4
+ 1 C  dyz             0.0       0.0       0.0       0.1       0.2       2.0
+ 1 C  dx2y2           0.5       0.1       0.2       2.4       0.5       0.5
+ 1 C  dxy             6.8       0.5       0.0       8.9       1.8       0.0
+ 2 C  s               0.6       0.6       0.0       1.8       0.0       0.1
+ 2 C  pz              0.0       0.0       0.3       0.0       0.0       0.0
+ 2 C  px              1.4       0.0       0.0       0.0       0.8       0.3
+ 2 C  py              0.1       0.9       0.0       1.2       0.4       0.2
+ 2 C  dz2             0.3       9.9       0.1      11.8       1.1       0.1
+ 2 C  dxz             0.0       0.0       2.1       0.0       0.0       0.1
+ 2 C  dyz             0.1       0.0       4.7       0.8       0.4       0.0
+ 2 C  dx2y2          13.0       1.6       0.0       1.0       0.4       0.2
+ 2 C  dxy             2.7      11.4       0.0       0.8       1.7       1.0
+ 3 C  s               0.9       0.3       0.0       0.8       1.0       0.2
+ 3 C  pz              0.0       0.0       0.8       0.0       0.0       0.0
+ 3 C  px              0.7       0.0       0.0       0.3       0.2       0.1
+ 3 C  py              0.9       0.9       0.0       1.2       0.4       0.1
+ 3 C  dz2             4.0       6.1       0.0       3.2       4.2       0.2
+ 3 C  dxz             0.0       0.0       0.1       0.1       0.0       0.2
+ 3 C  dyz             0.0       0.1      16.0       0.3       0.0       0.2
+ 3 C  dx2y2          10.1       1.0       0.0       5.7       1.3       0.9
+ 3 C  dxy             2.7       9.0       0.2       0.9       0.0       1.9
+ 4 C  s               0.2       0.6       0.1       1.0       0.5       0.7
+ 4 C  pz              0.0       0.0       2.6       0.0       0.0       0.0
+ 4 C  px              0.3       0.5       0.0       1.6       0.1       0.6
+ 4 C  py              2.3       0.9       0.0       1.5       1.1       0.3
+ 4 C  dz2             0.4       2.5       0.5       4.1       0.9       1.8
+ 4 C  dxz             0.0       0.0       8.4       0.0       0.2       1.3
+ 4 C  dyz             0.0       0.0       2.9       0.0       0.0       0.1
+ 4 C  dx2y2           0.8       0.8       0.1       1.0       2.9       0.0
+ 4 C  dxy             0.4       0.3       0.0       7.8       0.0       0.7
+ 5 N  s               0.4       0.2       0.0       0.4       0.7       0.2
+ 5 N  pz              0.0       0.0       0.2       0.0       0.0       0.0
+ 5 N  px              0.4       0.0       0.0       0.5       1.6       2.2
+ 5 N  py              0.5       1.6       0.0       0.4       0.6       0.2
+ 5 N  dz2             0.3       2.3       0.0       1.0       2.7       0.8
+ 5 N  dxz             0.0       0.0       0.0       0.0       0.2       1.1
+ 5 N  dyz             0.0       0.0       3.9       0.0       0.0       0.0
+ 5 N  dx2y2           0.7       1.9       0.0       1.0       0.0       0.5
+ 5 N  dxy             3.1       3.2       0.1       2.1       1.9       0.8
+ 6 C  s               0.3       0.4       0.0       0.1       0.1       0.5
+ 6 C  pz              0.0       0.0       0.0       0.0       0.1       0.3
+ 6 C  px              0.2       0.0       0.0       0.3       0.2       0.2
+ 6 C  py              1.0       1.1       0.0       0.2       1.4       0.1
+ 6 C  dz2             3.2      10.0       0.0       0.2       0.4       8.1
+ 6 C  dxz             0.0       0.0       0.3       0.0       0.3       0.9
+ 6 C  dyz             0.1       0.0       0.2       0.0       1.6       6.4
+ 6 C  dx2y2           2.4       4.4       0.0       2.7       1.7       1.3
+ 6 C  dxy             0.2       3.7       0.0       1.9      17.6       3.9
+ 7 C  s               0.3       0.3       0.0       0.1       0.0       0.1
+ 7 C  pz              0.0       0.0       2.3       0.0       0.0       0.3
+ 7 C  px              0.0       0.2       0.0       0.0       0.1       0.1
+ 7 C  py              0.9       0.1       0.0       0.4       0.5       0.1
+ 7 C  dz2             8.2       2.4       1.6       3.2       3.0       0.9
+ 7 C  dxz             0.0       0.1      19.4       0.3       0.0       0.0
+ 7 C  dyz             1.2       0.2      17.1       0.4       2.4       2.4
+ 7 C  dx2y2           5.0       0.6       0.5       0.3       9.1       4.5
+ 7 C  dxy            15.5       1.5       0.0       1.7       0.0       0.2
+ 8 H  s               0.0       0.0       0.1       0.2       1.2       2.1
+ 9 H  s               0.1       0.0       0.1       0.5       0.3       4.2
+10 H  s               0.0       0.0       0.0       1.7       0.0       0.0
+11 H  s               0.0       3.4       0.0       0.3       0.4       0.2
+12 H  s               0.4       2.8       0.0       0.3       0.0       0.3
+13 H  s               1.0       3.0       0.0       0.0       1.2       0.5
+14 H  s               0.0       0.0       0.7       0.3       0.0       0.3
+15 H  s               0.3       0.0       0.0       0.8       1.4       0.3
+16 H  s               0.0       0.1       0.5       0.3       0.2       0.4
+
+                    108       109       110       111       112       113   
+                   2.03656   2.07243   2.09574   2.13938   2.16513   2.16865
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.1       0.0       0.0       0.1       0.1       0.1
+ 0 C  pz              0.6       0.5       0.1       0.2       0.0       0.0
+ 0 C  px              0.1       0.0       0.1       0.0       0.2       0.0
+ 0 C  py              0.2       0.2       0.6       0.1       0.1       1.0
+ 0 C  dz2            15.2      10.1       0.0       2.1       0.1       3.5
+ 0 C  dxz             0.2       2.7       0.9       0.0       0.0       0.1
+ 0 C  dyz             0.3       0.4      10.8       0.1       0.6       5.5
+ 0 C  dx2y2           0.5       3.1       0.9       1.2       3.6       1.2
+ 0 C  dxy             0.0       3.6      10.2       3.3       0.6      10.1
+ 1 C  s               0.2       0.1       0.0       0.1       0.1       0.1
+ 1 C  px              1.6       0.1       0.3       0.2       0.9       0.1
+ 1 C  py              0.3       0.0       0.3       0.8       0.7       1.7
+ 1 C  dz2             2.2       0.1       1.7       1.6       1.0       0.7
+ 1 C  dxz             2.4       0.1       0.0       0.4       0.1       0.0
+ 1 C  dyz             0.4       2.0       0.7       8.4       0.3       1.6
+ 1 C  dx2y2           1.6       0.0       0.6       0.2       0.5       0.1
+ 1 C  dxy             0.5       0.4       0.8       0.0       0.6       0.1
+ 2 C  s               0.1       0.0       0.0       0.7       1.1       1.1
+ 2 C  pz              0.0       0.5       0.0       0.9       0.0       0.3
+ 2 C  px              1.4       0.4       0.7       0.0       0.3       0.0
+ 2 C  py              0.1       0.1       0.1       0.7       0.7       0.9
+ 2 C  dz2             0.0       0.0       0.0       3.6       0.6       5.5
+ 2 C  dxz             0.9       3.3       1.4       5.7       0.5       6.1
+ 2 C  dyz             0.0       3.5       0.0       5.8       0.1       1.1
+ 2 C  dx2y2           0.2       1.1       0.5       0.3       0.2       0.2
+ 2 C  dxy             0.0       0.0       0.0       1.1       2.0       2.1
+ 3 C  s               0.2       0.2       0.2       0.0       1.2       0.1
+ 3 C  pz              0.1       0.4       0.2       0.4       0.0       0.3
+ 3 C  px              0.6       0.1       0.3       0.8       1.2       0.8
+ 3 C  py              0.4       0.0       0.3       0.2       0.5       0.3
+ 3 C  dz2             1.0       0.4       0.3       0.0      12.5       0.5
+ 3 C  dxz             0.3       4.2       0.1      12.3       0.8       7.2
+ 3 C  dyz             1.3       2.4       1.5       1.4       0.0       1.6
+ 3 C  dx2y2           3.5       0.0       1.3       0.4       5.3       0.1
+ 3 C  dxy             2.0       0.1       1.6       0.2       1.3       0.8
+ 4 C  s               0.6       0.0       0.3       0.1       0.5       0.2
+ 4 C  pz              0.1       0.1       0.1       0.1       0.0       0.1
+ 4 C  px              1.2       0.0       0.4       0.3       1.1       0.2
+ 4 C  py              0.1       0.0       0.1       0.1       1.8       0.5
+ 4 C  dz2             5.1       1.1       4.8       4.6       1.0       5.0
+ 4 C  dxz             0.8       0.1       0.2       1.9       0.1       2.7
+ 4 C  dyz             0.2       0.2       1.2       0.0       0.0       0.4
+ 4 C  dx2y2           0.5       0.1       0.6       1.3       0.0       1.3
+ 4 C  dxy             1.3       1.4       2.3       0.3       2.2       0.5
+ 5 N  s               0.1       1.1       1.1       1.0       1.9       1.4
+ 5 N  pz              0.0       0.1       0.1       0.2       0.0       0.2
+ 5 N  px              2.0       0.3       0.0       0.1       0.7       0.0
+ 5 N  py              0.7       0.4       1.1       0.4       0.4       0.4
+ 5 N  dz2             0.1       0.6       0.6       0.9       0.7       0.9
+ 5 N  dxz             0.4       0.4       0.0       1.7       0.1       0.8
+ 5 N  dyz             0.6       0.8       1.0       5.1       0.1       3.8
+ 5 N  dx2y2           1.8       0.3       0.0       0.4       0.2       0.2
+ 5 N  dxy             0.0       0.6       0.3       2.0       0.2       2.7
+ 6 C  s               2.0       0.0       0.4       0.3       0.0       0.6
+ 6 C  pz              0.1       0.0       0.0       0.2       0.0       0.1
+ 6 C  px              0.0       0.2       0.4       0.3       0.6       0.3
+ 6 C  py              0.7       0.1       0.4       0.2       0.3       0.3
+ 6 C  dz2            20.0       1.4       1.2       3.0       0.4       4.0
+ 6 C  dxz             0.2       0.0       0.2       0.1       0.0       0.1
+ 6 C  dyz             1.5       0.1       0.8       4.3       0.3       1.9
+ 6 C  dx2y2           0.3       2.5       3.2       0.1       9.3       0.1
+ 6 C  dxy             0.0       0.1       0.1       0.0       2.2       0.1
+ 7 C  s               0.2       0.0       0.0       0.0       0.0       0.0
+ 7 C  pz              0.5       0.8       0.9       0.0       0.0       0.0
+ 7 C  px              0.1       0.0       0.0       0.0       0.2       0.0
+ 7 C  py              0.1       0.8       0.6       0.4       0.7       0.1
+ 7 C  dz2             3.1       3.0      11.1       4.5      12.6       2.7
+ 7 C  dxz             1.8       6.0       3.8       4.7       0.1       5.8
+ 7 C  dyz             7.9      24.0       9.5       4.2       0.6       2.0
+ 7 C  dx2y2           0.0       1.4       5.3       0.2       0.0       0.2
+ 7 C  dxy             2.1       1.7       1.2       0.6      17.3       0.4
+ 8 H  s               1.6       1.9       0.2       0.4       0.0       0.2
+ 9 H  s               0.1       0.0       2.0       0.0       0.0       1.2
+10 H  s               0.5       1.6       1.6       0.6       0.5       2.4
+11 H  s               0.0       0.1       0.1       0.0       0.2       0.1
+12 H  s               0.5       0.1       0.3       0.0       0.6       0.0
+13 H  s               0.3       0.0       0.2       0.1       0.9       0.1
+14 H  s               1.9       1.0       3.3       0.0       0.8       0.7
+15 H  s               0.3       1.4       1.8       0.6       2.3       0.1
+16 H  s               0.4       4.2       0.5       1.2       1.2       0.3
+
+                    114       115       116       117       118       119   
+                   2.21297   2.23555   2.25956   2.30348   2.34835   2.45901
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.6       0.0       0.1       0.0       0.0       0.0
+ 0 C  px              2.3       0.0       0.0       0.0       0.0       0.0
+ 0 C  py              0.0       0.1       0.1       0.0       0.1       0.1
+ 0 C  dz2             8.5       1.0       0.8       0.9       0.0       0.3
+ 0 C  dxz             0.2       4.8       0.1      18.2       0.0       0.0
+ 0 C  dyz             0.2       0.8       0.2       4.0       1.8       0.0
+ 0 C  dx2y2          21.5       0.1       0.2       0.2       0.0       0.1
+ 0 C  dxy             0.0       0.6       0.8       0.1       0.2       0.3
+ 1 C  s               0.1       0.0       0.2       0.0       0.0       3.2
+ 1 C  pz              0.0       0.0       0.0       0.2       0.2       0.0
+ 1 C  px              6.4       0.0       0.3       0.0       0.0       0.8
+ 1 C  py              0.1       0.0       0.1       0.0       0.0       0.2
+ 1 C  dz2             0.0       0.0       1.2       0.0       0.0       5.3
+ 1 C  dxz             0.0       7.2       0.0      35.3       0.7       0.0
+ 1 C  dyz             0.0      11.4       0.2       3.4      15.6       0.0
+ 1 C  dx2y2           0.8       0.0       1.3       0.0       0.0       0.3
+ 1 C  dxy             0.0       0.0       0.1       0.0       0.0       4.3
+ 2 C  s               1.0       0.1       0.0       0.0       0.0       1.2
+ 2 C  pz              0.0       0.4       0.0       0.2       0.0       0.0
+ 2 C  px              1.1       0.0       0.5       0.0       0.0       2.1
+ 2 C  py              0.2       0.0       0.2       0.0       0.0       0.1
+ 2 C  dz2             8.3       0.6       1.8       0.0       0.0       2.0
+ 2 C  dxz             0.1       0.5       0.0       0.9      25.2       0.0
+ 2 C  dyz             0.1       4.7       0.0       5.4       9.5       0.0
+ 2 C  dx2y2           7.9       0.0       6.9       0.0       0.0       3.8
+ 2 C  dxy             2.0       0.0       1.4       0.0       0.0       4.6
+ 3 C  s               0.2       0.0       1.6       0.0       0.0       4.6
+ 3 C  pz              0.0       0.4       0.0       0.2       0.1       0.0
+ 3 C  px              0.2       0.0       0.6       0.0       0.0       0.9
+ 3 C  py              0.1       0.0       0.4       0.0       0.0       1.2
+ 3 C  dz2             6.0       0.0       1.3       0.0       0.0      13.6
+ 3 C  dxz             0.0       3.2       0.2       0.0      17.1       0.0
+ 3 C  dyz             0.0      13.0       0.3       3.5       4.1       0.0
+ 3 C  dx2y2           0.1       0.0       2.0       0.0       0.0       1.4
+ 3 C  dxy             3.2       0.2       1.7       0.0       0.0       0.4
+ 4 C  s               0.4       0.1       0.9       0.0       0.0       2.7
+ 4 C  pz              0.0       0.0       0.0       0.0       0.4       0.0
+ 4 C  px              0.2       0.1       4.4       0.0       0.0       0.1
+ 4 C  py              0.2       0.0       0.0       0.0       0.0       0.2
+ 4 C  dz2             1.0       0.2       1.9       0.0       0.0      10.7
+ 4 C  dxz             0.1      18.6       0.3       0.1       2.6       0.0
+ 4 C  dyz             0.0      14.0       0.3       6.2       0.2       0.0
+ 4 C  dx2y2           0.8       0.0       1.2       0.0       0.0       0.0
+ 4 C  dxy             0.8       0.0       5.4       0.0       0.0       5.5
+ 5 N  s               0.3       0.0       0.1       0.0       0.0       0.1
+ 5 N  pz              0.0       0.2       0.0       0.2       0.0       0.0
+ 5 N  px              1.6       0.0       1.4       0.0       0.0       0.5
+ 5 N  py              0.4       0.0       1.2       0.0       0.0       0.0
+ 5 N  dz2             0.6       0.1       4.0       0.0       0.0       2.5
+ 5 N  dxz             0.0       0.0       0.0       0.0      16.0       0.0
+ 5 N  dyz             0.0       0.0       0.0       1.8       2.5       0.0
+ 5 N  dx2y2           1.4       0.1       7.7       0.0       0.0       0.0
+ 5 N  dxy             0.9       0.0       2.2       0.0       0.0       3.0
+ 6 C  s               0.4       0.0       0.2       0.0       0.0       3.5
+ 6 C  pz              0.0       0.0       0.0       0.3       0.5       0.0
+ 6 C  px              0.6       0.0       0.2       0.0       0.0       0.0
+ 6 C  py              0.1       0.0       0.0       0.0       0.0       1.4
+ 6 C  dz2             0.4       0.0       0.6       0.1       0.0       8.1
+ 6 C  dxz             0.0       4.1       0.1       3.2       1.6       0.0
+ 6 C  dyz             0.0       0.1       0.0      12.3       0.6       0.0
+ 6 C  dx2y2           8.9       0.1       2.7       0.0       0.0       0.7
+ 6 C  dxy             0.2       0.0       2.7       0.1       0.0       0.8
+ 7 C  s               0.0       0.0       0.8       0.0       0.0       0.3
+ 7 C  px              0.1       0.1       2.3       0.0       0.0       0.5
+ 7 C  dz2             1.0       0.0       5.5       0.0       0.0       3.6
+ 7 C  dxz             0.0      10.5       0.1       0.0       0.3       0.0
+ 7 C  dyz             0.1       0.0       0.0       0.9       0.0       0.0
+ 7 C  dx2y2           2.0       0.9      21.6       0.0       0.0       2.3
+ 7 C  dxy             1.4       0.3       5.6       0.1       0.0       1.4
+ 8 H  s               0.2       0.2       0.1       0.9       0.0       0.0
+ 9 H  s               0.5       0.0       0.1       0.9       0.2       0.0
+10 H  s               0.1       0.3       0.2       0.0       0.1       0.0
+11 H  s               2.0       0.0       0.0       0.0       0.0       0.2
+12 H  s               1.0       0.0       0.6       0.0       0.0       0.2
+13 H  s               0.5       0.0       0.0       0.0       0.0       0.1
+14 H  s               0.1       0.1       0.1       0.0       0.0       0.2
+15 H  s               0.0       0.1       0.7       0.0       0.0       0.0
+16 H  s               0.2       0.1       0.0       0.1       0.0       0.1
+
+                    120       121       122       123       124       125   
+                   2.50143   2.52292   2.63437   2.71899   2.74347   2.75969
+                   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------  --------  --------
+ 0 C  s               0.6       0.0       0.1       0.4       0.2       0.0
+ 0 C  px              1.2       0.0       0.1       0.5       0.5       0.0
+ 0 C  dz2             5.6       0.1       0.1       0.5       0.2       0.0
+ 0 C  dxz             0.0       0.5       0.0       0.0       0.0       0.0
+ 0 C  dyz             0.0       0.0       0.0       0.0       0.0       0.2
+ 0 C  dx2y2           5.7       0.0       0.4       1.9       2.3       0.0
+ 0 C  dxy             0.1       0.0       2.0       0.4       0.9       0.0
+ 1 C  s               8.2       0.1       0.8       0.1       0.3       0.0
+ 1 C  px              0.0       0.0       0.2       1.2       0.2       0.0
+ 1 C  py              0.0       0.0       0.4       1.1       0.0       0.0
+ 1 C  dz2            25.6       0.3       1.0       0.2       0.0       0.0
+ 1 C  dxz             0.0       1.9       0.0       0.0       0.0       0.1
+ 1 C  dyz             0.0       0.6       0.0       0.0       0.0       6.1
+ 1 C  dx2y2           0.3       0.0       0.9       4.2      13.9       0.0
+ 1 C  dxy             1.5       0.0       2.9       7.8       0.7       0.0
+ 2 C  s               4.1       0.0       0.1       1.8       0.1       0.0
+ 2 C  pz              0.0       0.1       0.0       0.0       0.0       0.0
+ 2 C  px              0.0       0.0       0.1       1.3       0.2       0.0
+ 2 C  py              1.3       0.0       0.1       0.1       0.3       0.0
+ 2 C  dz2            14.6       0.1       1.2       0.9       0.0       0.0
+ 2 C  dxz             0.0       0.1       0.0       0.0       0.0       3.2
+ 2 C  dyz             0.0       1.0       0.0       0.0       0.0       1.0
+ 2 C  dx2y2           0.1       0.0       0.1       0.1       1.8       0.0
+ 2 C  dxy             0.0       0.0       7.5       0.0       0.0       0.0
+ 3 C  s               0.6       0.0       1.8       0.0       0.2       0.0
+ 3 C  px              0.7       0.0       0.2       0.9       0.7       0.0
+ 3 C  py              0.1       0.0       0.8       0.8       0.6       0.0
+ 3 C  dz2             3.4       0.0       3.8       0.1       0.1       0.0
+ 3 C  dxz             0.0       0.9       0.0       0.0       0.0       4.4
+ 3 C  dyz             0.0       1.0       0.0       0.0       0.0       1.6
+ 3 C  dx2y2           0.3       0.0       1.5      20.3       0.2       0.0
+ 3 C  dxy             1.8       0.0      13.4       0.0       7.5       0.0
+ 4 C  s               0.1       0.0       5.9       0.5       0.3       0.0
+ 4 C  pz              0.0       0.4       0.0       0.0       0.0       0.1
+ 4 C  px              0.8       0.0       0.4       0.1       0.6       0.0
+ 4 C  py              0.0       0.0       1.0       0.5       1.3       0.0
+ 4 C  dz2             0.1       0.0       8.7       0.0       1.0       0.0
+ 4 C  dxz             0.2      13.9       0.0       0.0       0.0       0.3
+ 4 C  dyz             0.1       4.2       0.0       0.0       0.0      15.3
+ 4 C  dx2y2           2.2       0.0       0.6       3.5      21.2       0.0
+ 4 C  dxy             0.5       0.0       1.0      19.0       2.4       0.0
+ 5 N  s               0.9       0.0       1.6       1.7       2.1       0.0
+ 5 N  pz              0.0       2.1       0.0       0.0       0.0       0.0
+ 5 N  px              0.2       0.0       0.5       0.4       1.9       0.0
+ 5 N  py              0.7       0.0       0.8       1.3       0.5       0.0
+ 5 N  dz2             3.9       0.1      17.3       4.4      11.7       0.0
+ 5 N  dxz             0.2      13.2       0.0       0.0       0.0      37.9
+ 5 N  dyz             0.5      42.0       0.0       0.0       0.0      12.4
+ 5 N  dx2y2           0.0       0.0       1.8       1.0       0.8       0.0
+ 5 N  dxy             0.4       0.0       5.1       2.3       0.2       0.0
+ 6 C  s               0.5       0.0       0.5       0.0       0.9       0.0
+ 6 C  pz              0.0       0.5       0.0       0.0       0.0       0.1
+ 6 C  px              0.5       0.0       0.2       1.9       0.3       0.0
+ 6 C  py              0.3       0.0       0.3       0.6       0.0       0.0
+ 6 C  dz2             3.2       0.0       0.6       0.0       1.5       0.0
+ 6 C  dxz             0.1       9.8       0.0       0.0       0.0      14.7
+ 6 C  dyz             0.0       1.8       0.0       0.0       0.0       2.1
+ 6 C  dx2y2           0.1       0.0       5.2       1.3      11.5       0.0
+ 6 C  dxy             5.4       0.1       4.0      11.2       0.5       0.0
+ 7 C  s               0.2       0.0       0.2       0.1       0.6       0.0
+ 7 C  px              0.2       0.0       0.4       0.2       1.4       0.0
+ 7 C  dz2             0.2       0.0       1.1       0.2       1.1       0.0
+ 7 C  dxz             0.1       3.5       0.0       0.0       0.0       0.0
+ 7 C  dyz             0.0       0.9       0.0       0.0       0.0       0.4
+ 7 C  dx2y2           1.1       0.0       1.7       0.9       5.7       0.0
+ 7 C  dxy             0.0       0.0       0.0       3.5       0.6       0.0
+ 8 H  s               0.3       0.0       0.0       0.0       0.0       0.0
+10 H  s               0.0       0.0       0.1       0.0       0.1       0.0
+11 H  s               0.4       0.0       0.2       0.0       0.0       0.0
+12 H  s               0.3       0.0       0.1       0.2       0.4       0.0
+13 H  s               0.0       0.0       0.7       0.2       0.2       0.0
+14 H  s               0.0       0.1       0.0       0.0       0.0       0.0
+15 H  s               0.0       0.0       0.0       0.0       0.1       0.0
+16 H  s               0.0       0.2       0.0       0.0       0.0       0.0
+
+                    126       127       128       129   
+                   2.81241   2.83738   3.21423   3.40601
+                   0.00000   0.00000   0.00000   0.00000
+                  --------  --------  --------  --------
+ 0 C  s               0.1       0.4       0.0       0.1
+ 0 C  px              0.0       0.7       0.0       0.2
+ 0 C  py              0.1       0.0       0.0       0.0
+ 0 C  dz2             0.0       0.4       0.0       0.0
+ 0 C  dx2y2           0.0       2.5       0.0       0.6
+ 0 C  dxy             4.6       0.2       0.3       0.0
+ 1 C  s               0.3       0.0       0.0       0.5
+ 1 C  px              0.3       0.3       0.1       0.2
+ 1 C  py              3.2       0.8       0.5       0.0
+ 1 C  dz2             0.0       0.1       0.0       0.2
+ 1 C  dx2y2           0.9      13.3       0.0      10.7
+ 1 C  dxy            29.4       0.5       2.7       0.1
+ 2 C  s               0.1       1.4       0.0       0.6
+ 2 C  px              3.2       0.1       0.4       0.0
+ 2 C  py              2.0       0.2       0.1       0.0
+ 2 C  dz2             0.0       0.7       0.0       0.4
+ 2 C  dx2y2          18.2       7.2       0.9       2.0
+ 2 C  dxy             7.1      12.0       0.1       6.4
+ 3 C  s               0.9       0.5       0.0       0.8
+ 3 C  px              2.1       1.1       0.5       0.0
+ 3 C  py              0.0       0.5       0.4       0.1
+ 3 C  dz2             0.1       0.3       0.0       0.4
+ 3 C  dx2y2           5.9       2.9       2.3       2.3
+ 3 C  dxy             2.8       4.5       0.2       7.4
+ 4 C  s               1.1       0.9       1.3       0.7
+ 4 C  px              0.7       0.2       0.6       0.2
+ 4 C  py              0.0       1.9       3.1       0.1
+ 4 C  dz2             0.1       1.2       0.1       0.6
+ 4 C  dx2y2           0.0       0.6       0.1      15.9
+ 4 C  dxy             0.0       1.0      12.5       0.0
+ 5 N  s               0.0       3.1       0.0       1.6
+ 5 N  px              0.7       0.0       4.6       0.1
+ 5 N  py              0.2       0.4       1.8       0.1
+ 5 N  dz2             0.2      17.2       0.0       2.8
+ 5 N  dx2y2           6.8       1.9      39.2       7.4
+ 5 N  dxy             1.1      13.3      12.7      19.3
+ 6 C  s               2.8       0.5       1.5       1.2
+ 6 C  px              0.0       1.6       3.9       0.2
+ 6 C  py              1.3       0.1       0.1       0.0
+ 6 C  dz2             0.9       1.4       0.1       1.0
+ 6 C  dx2y2           1.4       0.3       5.9       4.3
+ 6 C  dxy             0.6       0.6       2.1       9.0
+ 7 C  s               0.1       0.1       0.1       0.1
+ 7 C  px              0.0       0.0       0.0       0.3
+ 7 C  dx2y2           0.0       0.0       0.0       0.8
+ 7 C  dxy             0.0       1.4       1.2       0.1
+11 H  s               0.0       0.9       0.0       0.3
+12 H  s               0.0       0.4       0.0       0.3
+13 H  s               0.0       0.0       0.0       0.3
+
+
+                      *****************************
+                      * MAYER POPULATION ANALYSIS *
+                      *****************************
+
+  NA   - Mulliken gross atomic population
+  ZA   - Total nuclear charge
+  QA   - Mulliken gross atomic charge
+  VA   - Mayer's total valence
+  BVA  - Mayer's bonded valence
+  FA   - Mayer's free valence
+
+  ATOM       NA         ZA         QA         VA         BVA        FA
+  0 C      6.2186     6.0000    -0.2186     3.9032     3.9032    -0.0000
+  1 C      6.0163     6.0000    -0.0163     4.0267     4.0267    -0.0000
+  2 C      6.0540     6.0000    -0.0540     3.9027     3.9027    -0.0000
+  3 C      6.0858     6.0000    -0.0858     3.8592     3.8592    -0.0000
+  4 C      6.0837     6.0000    -0.0837     4.2298     4.2298     0.0000
+  5 N      7.0641     7.0000    -0.0641     3.1849     3.1849     0.0000
+  6 C      6.0987     6.0000    -0.0987     4.0177     4.0177     0.0000
+  7 C      6.1825     6.0000    -0.1825     3.8817     3.8817     0.0000
+  8 H      0.8773     1.0000     0.1227     0.9503     0.9503    -0.0000
+  9 H      0.8845     1.0000     0.1155     0.9564     0.9564    -0.0000
+ 10 H      0.8958     1.0000     0.1042     0.9645     0.9645    -0.0000
+ 11 H      0.9540     1.0000     0.0460     0.9605     0.9605    -0.0000
+ 12 H      0.9569     1.0000     0.0431     0.9616     0.9616    -0.0000
+ 13 H      0.9497     1.0000     0.0503     0.9662     0.9662     0.0000
+ 14 H      0.8826     1.0000     0.1174     0.9632     0.9632    -0.0000
+ 15 H      0.9110     1.0000     0.0890     0.9669     0.9669     0.0000
+ 16 H      0.8846     1.0000     0.1154     0.9688     0.9688     0.0000
+
+  Mayer bond orders larger than 0.100000
+B(  0-C ,  1-C ) :   1.0975 B(  0-C ,  8-H ) :   0.9322 B(  0-C ,  9-H ) :   0.9387 
+B(  0-C , 10-H ) :   0.9440 B(  1-C ,  2-C ) :   1.4315 B(  1-C ,  6-C ) :   1.3447 
+B(  2-C ,  3-C ) :   1.3992 B(  2-C , 11-H ) :   0.9517 B(  3-C ,  4-C ) :   1.4011 
+B(  3-C , 12-H ) :   0.9388 B(  4-C ,  5-N ) :   1.4920 B(  4-C ,  7-C ) :   1.1136 
+B(  5-N ,  6-C ) :   1.5663 B(  6-C , 13-H ) :   0.9558 B(  7-C , 14-H ) :   0.9288 
+B(  7-C , 15-H ) :   0.9419 B(  7-C , 16-H ) :   0.9309 
+
+-------
+TIMINGS
+-------
+
+Total SCF time: 0 days 0 hours 0 min 5 sec 
+
+Total time                  ....       5.935 sec
+Sum of individual times     ....       5.540 sec  ( 93.3%)
+
+SCF preparation             ....       0.149 sec  (  2.5%)
+Fock matrix formation       ....       4.753 sec  ( 80.1%)
+  Startup                   ....       0.044 sec  (  0.9% of F)
+  Split-RI-J                ....       1.599 sec  ( 33.6% of F)
+  XC integration            ....       2.718 sec  ( 57.2% of F)
+    Basis function eval.    ....       0.846 sec  ( 31.1% of XC)
+    Density eval.           ....       0.413 sec  ( 15.2% of XC)
+    XC-Functional eval.     ....       0.217 sec  (  8.0% of XC)
+    XC-Potential eval.      ....       0.613 sec  ( 22.5% of XC)
+Diagonalization             ....       0.000 sec  (  0.0%)
+Density matrix formation    ....       0.143 sec  (  2.4%)
+Total Energy calculation    ....       0.026 sec  (  0.4%)
+Population analysis         ....       0.065 sec  (  1.1%)
+Orbital Transformation      ....       0.046 sec  (  0.8%)
+Orbital Orthonormalization  ....       0.000 sec  (  0.0%)
+DIIS solution               ....       0.295 sec  (  5.0%)
+  MO trafo                  ....       0.000 sec  (  0.0 % of DIIS)
+  Orb grad                  ....       0.000 sec  (  0.0 % of DIIS)
+  Energy W gradient         ....       0.000 sec  (  0.0 % of DIIS)
+  DIIS error                ....       0.002 sec  (  0.8 % of DIIS)
+  DIIS work                 ....       0.259 sec  ( 87.7 % of DIIS)
+  Form Q                    ....       0.000 sec  (  0.0 % of DIIS)
+  Form QpQm                 ....       0.000 sec  (  0.0 % of DIIS)
+  Exp/Cayley                ....       0.000 sec  (  0.0 % of DIIS)
+  Orb update                ....       0.000 sec  (  0.0 % of DIIS)
+  Wake-sleep                ....       0.013 sec  (  4.4 % of DIIS)
+SOSCF solution              ....       0.062 sec  (  1.0%)
+  MO trafo                  ....       0.035 sec  ( 55.6 % of SOSCF)
+  Orb grad                  ....       0.001 sec  (  1.6 % of SOSCF)
+  Rot update                ....       0.013 sec  ( 21.0 % of SOSCF)
+  Step                      ....       0.013 sec  ( 21.7 % of SOSCF)
+Finished LeanSCF after   6.0 sec
+
+Maximum memory used throughout the entire LEANSCF-calculation: 12.1 MB
+
+
+-------------------------------------------------------------------------------
+                          DFT DISPERSION CORRECTION                            
+                                                                               
+                                DFTD4 V3.4.0                                   
+-------------------------------------------------------------------------------
+The PBE functional is recognized
+Active option DFTDOPT                   ...         5   
+
+-------------------------   ----------------
+Dispersion correction           -0.016163889
+-------------------------   ----------------
+
+------------------   -----------------
+gCP correction             0.064608477
+------------------   -----------------
+
+-------------------------   --------------------
+FINAL SINGLE POINT ENERGY      -326.184951563269
+-------------------------   --------------------
+
+
+------------------------------------------------------------------------------
+                              ORCA PROPERTY CALCULATIONS
+------------------------------------------------------------------------------
+
+GBWName                                 ... sp.gbw
+Number of atoms                         ...     17
+Number of basis functions               ...    130
+Max core memory                         ...   1024 MB
+
+Electric properties:
+Dipole moment                           ... YES
+Quadrupole moment                       ...  NO
+Static polarizability (Dipole/Dipole)   ...  NO
+Static polarizability (Dipole/Quad.)    ...  NO
+Static polarizability (Quad./Quad.)     ...  NO
+Static polarizability (Velocity)        ...  NO
+
+Atomic electric properties:
+Dipole moment                           ...  NO
+Quadrupole moment                       ...  NO
+Static polarizability                   ...  NO
+
+Choice of electric origin               ... Center of mass
+Position of electric origin             ...    -0.000002    -0.000003     0.000000
+
+General magnetic properties:
+Magnetizability                         ...  NO
+
+EPR properties:
+g-Tensor (aka g-matrix)                 ...  NO
+Zero-Field splitting spin-orbit         ...  NO
+Zero-field splitting spin-spin          ...  NO
+Hyperfine couplings                     ...  NO (   0 nuclei)
+Quadrupole couplings                    ...  NO (   0 nuclei)
+Contact density                         ...  NO (   0 nuclei)
+
+NMR properties:
+Chemical shifts                         ...  NO (   0 nuclei)
+Spin-rotation constants                 ...  NO (   0 nuclei)
+Spin-spin couplings                     ...  NO (   0 nuclei,    0 pairs)
+
+Choice of magnetic origin               ... GIAO
+Position of magnetic origin             ...     0.000000     0.000000     0.000000
+
+Properties with geometric perturbations:
+SCF Hessian                             ...  NO
+IR spectrum                             ...  NO
+VCD spectrum                            ...  NO
+X-ray spectroscopy properties:
+SCF XES/XAS/RIXS spectra                ...  NO
+
+
+-------------
+DIPOLE MOMENT
+-------------
+
+Method             : SCF
+Type of density    : Electron Density
+Multiplicity       :   1
+Irrep              :   0
+Energy             :  -326.2333961514104317 Eh
+Relativity type    : 
+Basis              : AO
+                                X                 Y                 Z
+Electronic contribution:     -0.762706945      -0.973056693      -0.065496363
+Nuclear contribution   :      1.161445896       1.561081481       0.095838593
+                        -----------------------------------------
+Total Dipole Moment    :      0.398738951       0.588024788       0.030342230
+                        -----------------------------------------
+Magnitude (a.u.)       :      0.711116413
+Magnitude (Debye)      :      1.807514277
+
+
+
+--------------------
+Rotational spectrum 
+--------------------
+ 
+Rotational constants in cm-1:             0.186428             0.049983             0.039999 
+Rotational constants in MHz :          5588.984212          1498.453281          1199.135260 
+
+Dipole components along the rotational axes: 
+x,y,z [a.u.] :    -0.398612     0.588110     0.030356 
+x,y,z [Debye]:    -1.013191     1.494857     0.077159 
+
+ 
+
+Dipole moment calculation done in   0.0 sec 
+
+Maximum memory used throughout the entire PROP-calculation: 7.7 MB
+
+--------------------------------
+SUGGESTED CITATIONS FOR THIS RUN
+--------------------------------
+
+Below you find a list of papers that are relevant to this ORCA run
+We neither can nor want to force you to cite these papers, but we appreciate if you do
+You receive ORCA, which is the product of decades of hard work by many enthusiastic individuals, for free
+The only thing we kindly ask in return is that you cite our papers,
+We deeply appreciate it, if you show your appreciation for ORCA by not just citing the generic ORCA reference.
+
+Please note that relegating all ORCA citations to the supporting information does *not* help us.
+SI sections are not indexed - citations you put there will not count into any citation statistics
+But we need these citations in order to attract the funding resources that allow us to do what we are doing
+
+Therefore, if you are a happy ORCA user, please consider citing a few of the papers listed below in the main body of your paper
+
+In addition to the list printed below, the program has created the file sp.bibtex that contains the list in bibtex format
+You can import this file easily into all common literature databanks and citation aid programs
+
+
+List of essential papers. We consider these as the minimum necessary citations
+
+  1. Neese,F.
+     Software update: the ORCA program system, version 5.0
+     WIRES Comput. Molec. Sci., 2022 12(1)e1606
+     doi.org/10.1002/wcms.1606
+
+List of papers to cite with high priority. The work reported in these papers was absolutely
+necessary for this run to complete.
+Our perspective: the developers of density functionals and basis sets usually get cited in chemistry papers
+Good! But without the algorithms to do something with them, the functionals or basis sets would not do anything.
+Hence, in our opinion, the algorithm design and method developments papers are equally worthy of getting cited
+
+  1. Neese,F.
+     An improvement of the resolution of the identity approximation for the formation of the Coulomb matrix
+     J. Comp. Chem., 2003 24(14)1740-1747
+     doi.org/10.1002/jcc.10318
+  2. Neese,F.
+     The SHARK Integral Generation and Digestion System
+     J. Comp. Chem., 2022  1-16
+     doi.org/10.1002/jcc.26942
+  3. Caldeweyher,E.; Bannwarth,C.; Grimme,S.
+     Extension of the D3 dispersion coefficient model
+     J. Chem. Phys., 2017 147 034112-XXXX
+     doi.org/10.1063/1.4993215
+  4. Caldeweyher,E.; Ehlert,S.; Hansen,A.; Neugebauer,H.; Spicher,S.; Bannwarth,C.; Grimme,S.
+     A generally applicable atomic-charge dependent London dispersion correction
+     J. Chem. Phys., 2019 150 154122-XXXX
+     doi.org/10.1063/1.5090222
+  5. Caldeweyher,E.; Mewes,J.; Ehlert,S.; Grimme,S.
+     Extension and evaluation of the D4 London-dispersion model for periodic systems
+     Phys. Chem. Chem. Phys., 2020 22(16)8499-8512
+     doi.org/10.1039/D0CP00502A
+
+List of suggested additional citations. These are papers that are important in the 'surrounding' of 
+of this run, or papers that preceded the highly important papers. If you like your results we are grateful for a citation.
+
+  1. Neese,F.
+     The ORCA program system
+     WIRES Comput. Molec. Sci., 2012 2(1)73-78
+     doi.org/10.1002/wcms.81
+  2. Neese,F.
+     Software update: the ORCA program system, version 4.0
+     WIRES Comput. Molec. Sci., 2018 8(1)1-6
+     doi.org/10.1002/wcms.1327
+  3. Neese,F.; Wennmohs,F.; Becker,U.; Riplinger,C.
+     The ORCA quantum chemistry program package
+     J. Chem. Phys., 2020 152 Art. No. L224108
+     doi.org/10.1063/5.0004608
+
+List of optional additional citations
+
+  1. Neese,F.
+     Approximate second-order SCF convergence for spin unrestricted wavefunctions
+     Chem. Phys. Lett., 2000 325(1-3)93-98
+     doi.org/10.1016/s0009-2614(00)00662-x
+
+Timings for individual modules:
+
+Sum of individual times          ...        7.415 sec (=   0.124 min)
+Startup calculation              ...        0.654 sec (=   0.011 min)   8.8 %
+SCF iterations                   ...        6.665 sec (=   0.111 min)  89.9 %
+Property calculations            ...        0.096 sec (=   0.002 min)   1.3 %
+                             ****ORCA TERMINATED NORMALLY****
+TOTAL RUN TIME: 0 days 0 hours 0 minutes 8 seconds 43 msec
