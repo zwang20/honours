@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+#PBS -l walltime=12:00:00
+#PBS -l mem=39Gb
+#PBS -l ncpus=5
+#PBS -l select=cpuflags=avx512_vpopcntdq
+#PBS -j oe
+set -e
+
+lscpu
+
+cd "${PBS_O_WORKDIR}"
+
+module add crest
+module add orca
+
+yes | /srv/scratch/${USER}/.censo/bin/censo --cleanup_all > censo_cleanup.out
+/srv/scratch/${USER}/.censo/bin/censo -i crest_conformers.xyz --maxcores 5 -O 1 --loglevel DEBUG > censo.out
